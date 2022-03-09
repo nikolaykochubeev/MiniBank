@@ -1,24 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Minibank.Core;
 using Minibank.Core.Services;
 
 namespace Minibank.Web.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/minibank/[controller]/[action]")]
     public class CalculateController : ControllerBase
     {
-        private readonly IConvertor _convertor;
+        private readonly ICurrencyConverter _currencyConverter;
 
-        public CalculateController(IConvertor convertor)
+        public CalculateController(ICurrencyConverter currencyConverter)
         {
-            _convertor = convertor;
+            _currencyConverter = currencyConverter;
         }
 
         [HttpGet]
         public decimal ConvertRublesTo(decimal amount, string currency)
         {
-            return _convertor.Convert(amount, currency);
+            return _currencyConverter.Convert(amount, currency);
         }
     }
 }
