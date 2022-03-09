@@ -1,13 +1,12 @@
 ﻿using Minibank.Core.Exceptions;
-using Minibank.Core.Models;
 
 namespace Minibank.Core.Services
 {
-    public class Convertor : IConvertor
+    public class CurrencyConverter : ICurrencyConverter
     {
         private readonly ICurrentCourseDb _currentCourseDb;
 
-        public Convertor(ICurrentCourseDb currentCourseDb)
+        public CurrencyConverter(ICurrentCourseDb currentCourseDb)
         {
             _currentCourseDb = currentCourseDb;
         }
@@ -16,9 +15,9 @@ namespace Minibank.Core.Services
         {
             var rate = _currentCourseDb.GetRate(currency);
             
-            if (rate == default)
+            if (rate == -1)
             {
-                throw new UserFriendlyException($"Currency {currency} does not exists");
+                throw new MinibankException($"Currency {currency} does not exist");
             }
             
             return rate * amount;

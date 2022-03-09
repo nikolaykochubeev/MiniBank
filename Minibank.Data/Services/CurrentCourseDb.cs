@@ -1,22 +1,19 @@
 ﻿using System;
-using Minibank.Core.Models;
+using Minibank.Core.Services;
 
 namespace Minibank.Data.Services
 {
     public class CurrentCourseDb : ICurrentCourseDb
     {
-        private Random rand; 
-        public CurrentCourseDb()
-        {
-            rand = new Random();
-        }
+        private static readonly Random Random = new();
+
         public decimal GetRate(string currency)
         {
             return currency switch
             {
-                "USD" => rand.Next(),
-                "EUR" => rand.Next(),
-                _ => default,
+                "USD" => Random.Next(),
+                "EUR" => Random.Next(),
+                _ => -1,
             };
         }
     }

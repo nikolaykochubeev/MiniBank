@@ -1,4 +1,4 @@
-﻿namespace Minibank.Core.Models
+﻿namespace Minibank.Core.Services
 {
     public interface ICurrentCourseDb
     {
