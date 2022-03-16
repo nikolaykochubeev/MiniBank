@@ -19,10 +19,10 @@ namespace Minibank.Web.Middlewares
             {
                 await next(httpContext);
             }
-            catch (MinibankException exception)
+            catch (ValidationException exception)
             {
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await httpContext.Response.WriteAsJsonAsync(new { Message = exception.Message });
+                await httpContext.Response.WriteAsJsonAsync(new { Message = exception.Message , exception});
             }
         }
     }
