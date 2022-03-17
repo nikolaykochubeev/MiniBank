@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Minibank.Core.Domains.MoneyTransferHistory;
-using Minibank.Core.Domains.Services;
+using Minibank.Core.Domains.BankAccount.Services;
+using Minibank.Core.Domains.Transactions.Services;
 using Minibank.Core.Domains.Users.Services;
 using Minibank.Core.Services;
 
@@ -13,7 +13,7 @@ namespace Minibank.Core
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBankAccountService, BankAccountService>();
-            services.AddScoped<IMoneyTransferHistoryService, MoneyTransferHistoryService>();
+            services.AddScoped<ITransactionService, TransactionService>();
             return services;
         }
     }

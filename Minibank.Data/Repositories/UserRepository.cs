@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Minibank.Core.Domains.Users;
 using Minibank.Core.Domains.Users.Repositories;
-using Minibank.Web.Users;
+using Minibank.Data.DbModels;
 
 namespace Minibank.Data.Repositories
 {

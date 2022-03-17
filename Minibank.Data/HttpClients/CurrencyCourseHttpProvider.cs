@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Minibank.Core.Services;
 using Minibank.Data.HttpClients.Models;
 
@@ -20,6 +18,11 @@ namespace Minibank.Data.HttpClients
 
         public async Task<decimal> GetRubleCourse(string currencyCode)
         {
+            if (currencyCode == "RUB")
+            {
+                return 1;
+            }
+
             var response = await GetRubleCourses();
             var valute = response.Valute[currencyCode];
 

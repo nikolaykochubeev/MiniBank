@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Minibank.Core.Domains.Services;
 using Minibank.Core.Domains.Users.Repositories;
 
 namespace Minibank.Core.Domains.Users.Services
@@ -24,9 +23,9 @@ namespace Minibank.Core.Domains.Users.Services
             return _userRepository.GetAll();
         }
 
-        public void Create(UserModel userModelModel)
+        public void Create(UserModel userModel)
         {
-            _userRepository.Create(userModelModel);
+            _userRepository.Create(userModel);
         }
 
         public void Update(UserModel userModel)

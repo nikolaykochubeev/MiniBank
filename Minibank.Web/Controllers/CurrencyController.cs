@@ -1,8 +1,6 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Services;
-using Minibank.Data.HttpClients.Models;
 
 namespace Minibank.Web.Controllers
 {

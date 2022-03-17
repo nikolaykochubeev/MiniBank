@@ -1,10 +1,8 @@
 ﻿using System;
-using Minibank.Core.Domains.MoneyTransferHistory.Repositories;
-using Minibank.Core.Domains.Services;
 
-namespace Minibank.Core.Domains.MoneyTransferHistory
+namespace Minibank.Core.Domains.Transactions
 {
-    public class MoneyTransferHistory
+    public class TransactionModel
     {
         public Guid Id { get; set; }
         public decimal AmountOfMoney { get; set; }

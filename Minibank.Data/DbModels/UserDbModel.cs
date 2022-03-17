@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Minibank.Web.Users
+namespace Minibank.Data.DbModels
 {
     public class UserDbModel
     {

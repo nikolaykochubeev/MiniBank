@@ -54,13 +54,18 @@ namespace Minibank.Web.Controllers
             });
         }
         
-        [HttpPut("/{id}")]
-        public void Update(UserModel model)
+        [HttpPut("{id}")]
+        public void Update(Guid id, UserDto model)
         {
-            _userService.Update(model);
+            _userService.Update(new UserModel
+            {
+                Id = id,
+                Email = model.Email,
+                Login = model.Email
+            });
         }
         
-        [HttpDelete("/{id}")]
+        [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
             _userService.Delete(id);

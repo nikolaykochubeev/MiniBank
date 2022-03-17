@@ -2,8 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minibank.Core.Domains.BankAccount.Repositories;
-using Minibank.Core.Domains.MoneyTransferHistory;
-using Minibank.Core.Domains.MoneyTransferHistory.Repositories;
+using Minibank.Core.Domains.Transactions.Repositories;
 using Minibank.Core.Domains.Users.Repositories;
 using Minibank.Core.Services;
 using Minibank.Data.HttpClients;
@@ -21,7 +20,7 @@ namespace Minibank.Data
             });
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBankAccountRepository, BankAccountRepository>();
-            services.AddScoped<IMoneyTransferHistoryRepository, MoneyTransferHistoryRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
             return services;
         }
     }
