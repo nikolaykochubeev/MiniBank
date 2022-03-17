@@ -25,6 +25,7 @@ namespace Minibank.Data.Repositories
                 Id = entity.Id,
                 Login = entity.Login,
                 Email = entity.Email,
+                AmountOfBankAccounts = entity.AmountOfBankAccounts
             };
         }
 
@@ -35,6 +36,7 @@ namespace Minibank.Data.Repositories
                 Id = it.Id,
                 Login = it.Login,
                 Email = it.Email,
+                AmountOfBankAccounts = it.AmountOfBankAccounts
             });
         }
 
@@ -58,6 +60,7 @@ namespace Minibank.Data.Repositories
                 return;
             entity.Email = userModel.Email;
             entity.Login = userModel.Login;
+            entity.AmountOfBankAccounts = userModel.AmountOfBankAccounts;
         }
 
         public void Delete(Guid id)

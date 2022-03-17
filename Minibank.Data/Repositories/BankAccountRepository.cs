@@ -55,6 +55,8 @@ namespace Minibank.Data.Repositories
                 AmountOfMoney = bankAccountModel.AmountOfMoney,
                 Currency = bankAccountModel.Currency,
                 IsActive = bankAccountModel.IsActive,
+                OpeningDate = bankAccountModel.OpeningDate,
+                ClosingDate = bankAccountModel.ClosingDate
             };
             _bankAccountStorage.Add(entity);
         }

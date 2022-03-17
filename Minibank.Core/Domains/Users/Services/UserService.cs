@@ -45,7 +45,7 @@ namespace Minibank.Core.Domains.Users.Services
             var user = _userRepository.Get(id);
             if (user.AmountOfBankAccounts != 0)
             {
-                throw new ValidationException("User have a bankaccounts");
+                throw new ValidationException("User have an active bank accounts");
             }
             _userRepository.Delete(id);
         }

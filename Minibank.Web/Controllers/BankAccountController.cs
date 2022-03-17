@@ -24,12 +24,13 @@ namespace Minibank.Web.Controllers
         {
             return _bankAccountService.Get(id);
         }
-
+        
         [HttpGet]
         public IEnumerable<BankAccountModel> GetAll()
         {
             return _bankAccountService.GetAll();
         }
+        
         [HttpPost]
         public void Create(BankAccountDto bankAccountDto)
         {
@@ -38,31 +39,22 @@ namespace Minibank.Web.Controllers
                 UserId = bankAccountDto.UserId,
                 Currency = bankAccountDto.Currency,
                 AmountOfMoney = bankAccountDto.AmountOfMoney,
-                // OpeningDate = bankAccountDto.OpeningDate,
-                // ClosingDate = bankAccountDto.ClosingDate,
-                // IsActive = bankAccountDto.IsActive
+                OpeningDate = bankAccountDto.OpeningDate,
+                ClosingDate = bankAccountDto.ClosingDate,
+                IsActive = bankAccountDto.IsActive
             });
         }
         
         [HttpPut("id")]
-        public void Update(Guid id, BankAccountDto model)
+        public void Close(Guid id)
         {
-            _bankAccountService.Update(new BankAccountModel
-            {
-                Id = id,
-                UserId = model.UserId,
-                Currency = model.Currency,
-                AmountOfMoney = model.AmountOfMoney,
-                ClosingDate = model.ClosingDate,
-                OpeningDate = model.OpeningDate,
-                IsActive = model.IsActive
-            });
+            _bankAccountService.Close(id);
         }
-        
-        // [HttpDelete("{id}")]
-        // public void Delete(Guid id)
-        // {
-        //     _bankAccountService.Delete(id);
-        // }
+
+        [HttpDelete("{id}")]
+        public void Delete(Guid id)
+        {
+            _bankAccountService.Delete(id);
+        }
     }
 }

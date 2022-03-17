@@ -28,7 +28,8 @@ namespace Minibank.Web.Controllers
             {
                 Id = model.Id,
                 Login = model.Login,
-                Email = model.Email
+                Email = model.Email,
+                AmountOfBankAccounts = model.AmountOfBankAccounts
             };
         }
         
@@ -36,11 +37,12 @@ namespace Minibank.Web.Controllers
         public IEnumerable<UserModel> GetAll()
         {
             return _userService.GetAll()
-                .Select(it => new UserModel
+                .Select(model => new UserModel
                 {
-                    Id = it.Id,
-                    Login = it.Login,
-                    Email = it.Email
+                    Id = model.Id,
+                    Login = model.Login,
+                    Email = model.Email,
+                    AmountOfBankAccounts = model.AmountOfBankAccounts
                 });
         }
         
@@ -52,6 +54,7 @@ namespace Minibank.Web.Controllers
                 Login = model.Login,
                 Email = model.Email
             });
+            
         }
         
         [HttpPut("{id}")]

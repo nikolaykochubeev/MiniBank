@@ -9,6 +9,7 @@ namespace Minibank.Core.Domains.BankAccount.Services
         IEnumerable<BankAccountModel> GetAll();
         void Create(BankAccountModel bankAccountModel);
         void Update(BankAccountModel bankAccountModel);
+        void Close(Guid id);
         void Delete(Guid id);
     }
 }
