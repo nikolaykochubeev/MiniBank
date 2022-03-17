@@ -6,7 +6,7 @@ namespace Minibank.Web.Dto
     {
         public decimal AmountOfMoney { get; set; }
         public string Currency { get; set; }
-        public Guid FromAccountId;
-        public Guid ToAccountId;
+        public Guid FromAccountId { get; set; }
+        public Guid ToAccountId { get; set; }
     }
 }

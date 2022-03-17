@@ -45,7 +45,7 @@ namespace Minibank.Data.Repositories
         {
             var entity = new TransactionDbModel()
             {
-                Id = transactionModel.Id,
+                Id = Guid.NewGuid(),
                 AmountOfMoney = transactionModel.AmountOfMoney,
                 Currency = transactionModel.Currency,
                 FromAccountId = transactionModel.FromAccountId,
