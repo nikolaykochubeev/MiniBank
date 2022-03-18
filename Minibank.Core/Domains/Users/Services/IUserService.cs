@@ -7,7 +7,7 @@ namespace Minibank.Core.Domains.Users.Services
     {
         UserModel Get(Guid id);
         IEnumerable<UserModel> GetAll();
-        void Create(UserModel userModel);
+        Guid Create(UserModel userModel);
         void Update(UserModel user);
         void Delete(Guid id);
     }

@@ -37,7 +37,7 @@ namespace Minibank.Core.Domains.BankAccount.Services
             return _bankAccountRepository.GetAll();
         }
 
-        public void Create(BankAccountModel bankAccountModel)
+        public Guid Create(BankAccountModel bankAccountModel)
         {
             var user = _userRepository.Get(bankAccountModel.UserId);
             if (user is null)
@@ -56,7 +56,15 @@ namespace Minibank.Core.Domains.BankAccount.Services
                 throw new ValidationException("It is impossible to create a bank account with this currency");
             }
 
-            _bankAccountRepository.Create(bankAccountModel);
+            _bankAccountRepository.Create(new BankAccountModel
+            {
+                Id = Guid.NewGuid(),
+                UserId = bankAccountModel.UserId,
+                AmountOfMoney = bankAccountModel.AmountOfMoney,
+                Currency = bankAccountModel.Currency,
+                OpeningDate =  bankAccountModel.OpeningDate,
+                ClosingDate = bankAccountModel.ClosingDate,
+            });
             _userRepository.Update(new UserModel
             {
                 Id = user.Id,
@@ -64,11 +72,7 @@ namespace Minibank.Core.Domains.BankAccount.Services
                 Email = user.Email,
                 AmountOfBankAccounts = user.AmountOfBankAccounts + 1
             });
-        }
-
-        public void Update(BankAccountModel bankAccountModel)
-        {
-            _bankAccountRepository.Update(bankAccountModel);
+            return bankAccountModel.Id;
         }
 
         public decimal CalculateCommission(TransactionModel transactionModel)

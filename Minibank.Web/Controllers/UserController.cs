@@ -47,9 +47,9 @@ namespace Minibank.Web.Controllers
         }
         
         [HttpPost]
-        public void Create(UserDto model)
+        public Guid Create(UserDto model)
         {
-            _userService.Create(new UserModel
+            return _userService.Create(new UserModel
             {
                 Login = model.Login,
                 Email = model.Email

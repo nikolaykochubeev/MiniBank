@@ -40,7 +40,7 @@ namespace Minibank.Data.Repositories
             });
         }
 
-        public void Create(UserModel userModel)
+        public Guid Create(UserModel userModel)
         {
             var entity = new UserDbModel
             {
@@ -50,6 +50,7 @@ namespace Minibank.Data.Repositories
             };
 
             _userStorage.Add(entity);
+            return entity.Id;
         }
 
         public void Update(UserModel userModel)

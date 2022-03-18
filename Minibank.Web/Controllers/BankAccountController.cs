@@ -33,15 +33,13 @@ namespace Minibank.Web.Controllers
         }
         
         [HttpPost]
-        public void Create(BankAccountDto bankAccountDto)
+        public Guid Create(BankAccountDto bankAccountDto)
         {
-            _bankAccountService.Create(new BankAccountModel()
+            return _bankAccountService.Create(new BankAccountModel()
             {
                 UserId = bankAccountDto.UserId,
                 Currency = bankAccountDto.Currency,
                 AmountOfMoney = bankAccountDto.AmountOfMoney,
-                OpeningDate = bankAccountDto.OpeningDate,
-                ClosingDate = bankAccountDto.ClosingDate,
             });
         }
 

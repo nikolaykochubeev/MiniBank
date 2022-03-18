@@ -24,7 +24,7 @@ namespace Minibank.Core.Domains.Users.Services
             return _userRepository.GetAll();
         }
 
-        public void Create(UserModel userModel)
+        public Guid Create(UserModel userModel)
         {
             if (string.IsNullOrEmpty(userModel.Email))
                 throw new ValidationException("Email can not be the empty string.");
@@ -32,7 +32,7 @@ namespace Minibank.Core.Domains.Users.Services
             {
                 throw new ValidationException("Login can not be the empty string.");
             }
-            _userRepository.Create(userModel);
+            return _userRepository.Create(userModel);
         }
 
         public void Update(UserModel userModel)
