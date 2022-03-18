@@ -20,7 +20,7 @@ namespace Minibank.Web.Controllers
             _bankAccountService = bankAccountService;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public Task<BankAccountModel> Get(Guid id)
         {
             return Task.FromResult(_bankAccountService.Get(id));
@@ -38,18 +38,6 @@ namespace Minibank.Web.Controllers
             return _bankAccountService.GetAllTransactions();
         }
 
-        [HttpPost]
-        public Guid Create(BankAccountDto bankAccountDto)
-        {
-            return _bankAccountService.Create(new BankAccountModel()
-            {
-                UserId = bankAccountDto.UserId,
-                Currency = bankAccountDto.Currency,
-                AmountOfMoney = bankAccountDto.AmountOfMoney,
-                IsActive = true
-            });
-        }
-
         [HttpGet]
         public decimal GetTransferCommission(TransactionDto transactionModel)
         {
@@ -59,6 +47,18 @@ namespace Minibank.Web.Controllers
                 AmountOfMoney = transactionModel.AmountOfMoney,
                 FromAccountId = transactionModel.FromAccountId,
                 ToAccountId = transactionModel.ToAccountId
+            });
+        }
+
+        [HttpPost]
+        public Guid Create(BankAccountDto bankAccountDto)
+        {
+            return _bankAccountService.Create(new BankAccountModel()
+            {
+                UserId = bankAccountDto.UserId,
+                Currency = bankAccountDto.Currency,
+                AmountOfMoney = bankAccountDto.AmountOfMoney,
+                IsActive = true
             });
         }
 
