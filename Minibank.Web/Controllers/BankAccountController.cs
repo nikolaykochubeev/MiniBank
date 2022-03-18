@@ -25,7 +25,7 @@ namespace Minibank.Web.Controllers
         {
             return Task.FromResult(_bankAccountService.Get(id));
         }
-        
+
         [HttpGet]
         public IEnumerable<BankAccountModel> GetAll()
         {
@@ -73,7 +73,7 @@ namespace Minibank.Web.Controllers
                 ToAccountId = transactionModel.ToAccountId
             });
         }
-        
+
         [HttpPut("{id}")]
         public void Close(Guid id)
         {
