@@ -40,6 +40,7 @@ namespace Minibank.Web.Controllers
                 UserId = bankAccountDto.UserId,
                 Currency = bankAccountDto.Currency,
                 AmountOfMoney = bankAccountDto.AmountOfMoney,
+                IsActive = true
             });
         }
 
