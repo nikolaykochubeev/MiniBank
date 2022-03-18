@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Minibank.Core.Domains.BankAccount;
 using Minibank.Core.Domains.BankAccount.Repositories;
-using Minibank.Core.Services;
 using Minibank.Data.DbModels;
 
 namespace Minibank.Data.Repositories
@@ -73,16 +72,6 @@ namespace Minibank.Data.Repositories
             entity.ClosingDate = bankAccountModel.ClosingDate;
             entity.OpeningDate = bankAccountModel.OpeningDate;
             entity.IsActive = bankAccountModel.IsActive;
-        }
-
-        public void Delete(Guid id)
-        {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
-
-            if (entity != null)
-            {
-                _bankAccountStorage.Remove(entity);
-            }
         }
     }
 }

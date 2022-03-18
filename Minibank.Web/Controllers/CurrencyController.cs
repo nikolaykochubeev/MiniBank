@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Minibank.Core.Services;
+using Minibank.Core.Domains.Currency.Services;
 
 namespace Minibank.Web.Controllers
 {

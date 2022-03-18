@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minibank.Core.Domains.BankAccount.Repositories;
+using Minibank.Core.Domains.Currency.Services;
 using Minibank.Core.Domains.Transactions.Repositories;
 using Minibank.Core.Domains.Users.Repositories;
-using Minibank.Core.Services;
 using Minibank.Data.HttpClients;
 using Minibank.Data.Repositories;
 

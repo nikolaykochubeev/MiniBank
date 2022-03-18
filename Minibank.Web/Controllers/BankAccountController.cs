@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Domains.BankAccount;
 using Minibank.Core.Domains.BankAccount.Services;
+using Minibank.Core.Domains.Transactions;
 using Minibank.Web.Dto;
 
 namespace Minibank.Web.Controllers
@@ -20,9 +21,9 @@ namespace Minibank.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<BankAccountModel> Get(Guid id)
+        public Task<BankAccountModel> Get(Guid id)
         {
-            return _bankAccountService.Get(id);
+            return Task.FromResult(_bankAccountService.Get(id));
         }
         
         [HttpGet]
@@ -41,20 +42,37 @@ namespace Minibank.Web.Controllers
                 AmountOfMoney = bankAccountDto.AmountOfMoney,
                 OpeningDate = bankAccountDto.OpeningDate,
                 ClosingDate = bankAccountDto.ClosingDate,
-                IsActive = bankAccountDto.IsActive
+            });
+        }
+
+        [HttpGet]
+        public decimal GetTransferCommission(TransactionDto transactionModel)
+        {
+            return _bankAccountService.CalculateCommission(new TransactionModel
+            {
+                Currency = transactionModel.Currency,
+                AmountOfMoney = transactionModel.AmountOfMoney,
+                FromAccountId = transactionModel.FromAccountId,
+                ToAccountId = transactionModel.ToAccountId
+            });
+        }
+
+        [HttpGet]
+        public Guid CreateTransfer(TransactionDto transactionModel)
+        {
+            return _bankAccountService.Transfer(new TransactionModel
+            {
+                Currency = transactionModel.Currency,
+                AmountOfMoney = transactionModel.AmountOfMoney,
+                FromAccountId = transactionModel.FromAccountId,
+                ToAccountId = transactionModel.ToAccountId
             });
         }
         
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public void Close(Guid id)
         {
             _bankAccountService.Close(id);
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(Guid id)
-        {
-            _bankAccountService.Delete(id);
         }
     }
 }

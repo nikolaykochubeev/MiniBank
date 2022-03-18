@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Minibank.Core.Services;
+using Minibank.Core.Domains.Currency.Services;
 using Minibank.Data.HttpClients.Models;
 
 namespace Minibank.Data.HttpClients

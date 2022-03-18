@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Minibank.Core.Services
+namespace Minibank.Core.Domains.Currency.Services
 {
     public interface ICurrencyService
     {

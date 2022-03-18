@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Minibank.Core.Exceptions;
 
-namespace Minibank.Core.Services
+namespace Minibank.Core.Domains.Currency.Services
 {
     public class CurrencyService : ICurrencyService
     {

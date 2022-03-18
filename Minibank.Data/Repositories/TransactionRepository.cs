@@ -41,7 +41,7 @@ namespace Minibank.Data.Repositories
             });     
         }
 
-        public void Create(TransactionModel transactionModel)
+        public Guid Create(TransactionModel transactionModel)
         {
             var entity = new TransactionDbModel()
             {
@@ -52,6 +52,7 @@ namespace Minibank.Data.Repositories
                 ToAccountId = transactionModel.ToAccountId
             };
             _transactionModelStorage.Add(entity);
+            return entity.Id;
         }
 
         public void Update(TransactionModel transactionModel)
