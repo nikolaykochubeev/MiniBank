@@ -16,7 +16,7 @@ namespace Minibank.Data.Repositories
         {
             var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 return null;
             }
@@ -61,7 +61,7 @@ namespace Minibank.Data.Repositories
         {
             var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == transactionModel.Id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ValidationException("Transfer with this guid doesn't exists");
             }
@@ -76,7 +76,7 @@ namespace Minibank.Data.Repositories
         {
             var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == id);
 
-            if (entity != null)
+            if (entity is not null)
             {
                 _transactionModelStorage.Remove(entity);
             }

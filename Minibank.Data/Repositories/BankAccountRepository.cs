@@ -16,7 +16,7 @@ namespace Minibank.Data.Repositories
         {
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 return null;
             }
@@ -66,7 +66,7 @@ namespace Minibank.Data.Repositories
         {
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ValidationException("User with this guid doesn't exists");
             }
