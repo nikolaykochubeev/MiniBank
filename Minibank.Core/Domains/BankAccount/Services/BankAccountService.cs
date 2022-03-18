@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Minibank.Core.Domains.BankAccount.Repositories;
 using Minibank.Core.Domains.Currency.Services;
 using Minibank.Core.Domains.Transactions;
@@ -35,6 +36,10 @@ namespace Minibank.Core.Domains.BankAccount.Services
         public IEnumerable<BankAccountModel> GetAll()
         {
             return _bankAccountRepository.GetAll();
+        }
+        public IEnumerable<TransactionModel> GetAllTransactions()
+        {
+            return _transactionRepository.GetAll();
         }
 
         public Guid Create(BankAccountModel bankAccountModel)

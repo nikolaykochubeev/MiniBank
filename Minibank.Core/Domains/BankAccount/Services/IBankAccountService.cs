@@ -8,6 +8,7 @@ namespace Minibank.Core.Domains.BankAccount.Services
     {
         BankAccountModel Get(Guid id);
         IEnumerable<BankAccountModel> GetAll();
+        IEnumerable<TransactionModel> GetAllTransactions();
         Guid Create(BankAccountModel bankAccountModel);
         public decimal CalculateCommission(TransactionModel transactionModel);
         public Guid Transfer(TransactionModel transactionModel);

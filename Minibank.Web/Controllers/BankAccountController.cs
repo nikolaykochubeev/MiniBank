@@ -31,7 +31,13 @@ namespace Minibank.Web.Controllers
         {
             return _bankAccountService.GetAll();
         }
-        
+
+        [HttpGet]
+        public IEnumerable<TransactionModel> GetAllTransactions()
+        {
+            return _bankAccountService.GetAllTransactions();
+        }
+
         [HttpPost]
         public Guid Create(BankAccountDto bankAccountDto)
         {
