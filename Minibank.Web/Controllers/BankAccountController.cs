@@ -56,7 +56,7 @@ namespace Minibank.Web.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost]
         public Guid CreateTransfer(TransactionDto transactionModel)
         {
             return _bankAccountService.Transfer(new TransactionModel

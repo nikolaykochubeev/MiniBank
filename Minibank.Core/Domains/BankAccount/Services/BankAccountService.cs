@@ -65,6 +65,7 @@ namespace Minibank.Core.Domains.BankAccount.Services
                 Currency = bankAccountModel.Currency,
                 OpeningDate = bankAccountModel.OpeningDate,
                 ClosingDate = bankAccountModel.ClosingDate,
+                IsActive = true
             });
             _userRepository.Update(new UserModel
             {
