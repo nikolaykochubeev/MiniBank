@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Minibank.Core.Domains.Transactions;
 using Minibank.Core.Domains.Transactions.Repositories;
+using Minibank.Core.Exceptions;
 using Minibank.Data.DbModels;
 
 namespace Minibank.Data.Repositories
@@ -10,6 +11,7 @@ namespace Minibank.Data.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private static List<TransactionDbModel> _transactionModelStorage = new();
+
         public TransactionModel Get(Guid id)
         {
             var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == id);
@@ -38,7 +40,7 @@ namespace Minibank.Data.Repositories
                 Currency = entity.Currency,
                 FromAccountId = entity.FromAccountId,
                 ToAccountId = entity.ToAccountId
-            });     
+            });
         }
 
         public Guid Create(TransactionModel transactionModel)
@@ -60,7 +62,10 @@ namespace Minibank.Data.Repositories
             var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == transactionModel.Id);
 
             if (entity == null)
-                return;
+            {
+                throw new ValidationException("Transfer with this guid doesn't exists");
+            }
+
             entity.AmountOfMoney = transactionModel.AmountOfMoney;
             entity.Currency = transactionModel.Currency;
             entity.FromAccountId = transactionModel.FromAccountId;

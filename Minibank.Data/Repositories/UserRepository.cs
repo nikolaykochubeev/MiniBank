@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Minibank.Core.Domains.Users;
 using Minibank.Core.Domains.Users.Repositories;
+using Minibank.Core.Exceptions;
 using Minibank.Data.DbModels;
 
 namespace Minibank.Data.Repositories
@@ -58,7 +59,10 @@ namespace Minibank.Data.Repositories
             var entity = _userStorage.FirstOrDefault(it => it.Id == userModel.Id);
 
             if (entity == null)
-                return;
+            {
+                throw new ValidationException("User with this guid doesn't exists");
+            }
+
             entity.Email = userModel.Email;
             entity.Login = userModel.Login;
             entity.AmountOfBankAccounts = userModel.AmountOfBankAccounts;

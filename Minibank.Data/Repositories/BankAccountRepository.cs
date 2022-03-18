@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Minibank.Core.Domains.BankAccount;
 using Minibank.Core.Domains.BankAccount.Repositories;
+using Minibank.Core.Exceptions;
 using Minibank.Data.DbModels;
 
 namespace Minibank.Data.Repositories
@@ -10,6 +11,7 @@ namespace Minibank.Data.Repositories
     public class BankAccountRepository : IBankAccountRepository
     {
         private static List<BankAccountDbModel> _bankAccountStorage = new();
+
         public BankAccountModel Get(Guid id)
         {
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
@@ -21,7 +23,7 @@ namespace Minibank.Data.Repositories
 
             return new BankAccountModel
             {
-                Id = entity.Id, 
+                Id = entity.Id,
                 UserId = entity.UserId,
                 AmountOfMoney = entity.AmountOfMoney,
                 Currency = entity.Currency,
@@ -35,7 +37,7 @@ namespace Minibank.Data.Repositories
         {
             return _bankAccountStorage.Select(entity => new BankAccountModel()
             {
-                Id = entity.Id, 
+                Id = entity.Id,
                 UserId = entity.UserId,
                 AmountOfMoney = entity.AmountOfMoney,
                 Currency = entity.Currency,
@@ -65,7 +67,10 @@ namespace Minibank.Data.Repositories
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
 
             if (entity == null)
-                return;
+            {
+                throw new ValidationException("User with this guid doesn't exists");
+            }
+
             entity.UserId = bankAccountModel.UserId;
             entity.Currency = bankAccountModel.Currency;
             entity.AmountOfMoney = bankAccountModel.AmountOfMoney;
