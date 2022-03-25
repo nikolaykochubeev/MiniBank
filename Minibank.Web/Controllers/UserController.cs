@@ -29,7 +29,6 @@ namespace Minibank.Web.Controllers
                 Id = model.Id,
                 Login = model.Login,
                 Email = model.Email,
-                AmountOfBankAccounts = model.AmountOfBankAccounts
             };
         }
         
@@ -42,7 +41,6 @@ namespace Minibank.Web.Controllers
                     Id = model.Id,
                     Login = model.Login,
                     Email = model.Email,
-                    AmountOfBankAccounts = model.AmountOfBankAccounts
                 });
         }
         

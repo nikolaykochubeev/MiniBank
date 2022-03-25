@@ -83,7 +83,6 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 Id = user.Id,
                 Login = user.Login,
                 Email = user.Email,
-                AmountOfBankAccounts = user.AmountOfBankAccounts + 1
             });
             return bankAccountId;
         }

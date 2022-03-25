@@ -9,5 +9,6 @@ namespace Minibank.Core.Domains.BankAccounts.Repositories
         IEnumerable<BankAccountModel> GetAll();
         void Create(BankAccountModel bankAccountModel);
         void Update(BankAccountModel bankAccountModel);
+        int GetNumberOfBankAccounts(Guid id);
     }
 }

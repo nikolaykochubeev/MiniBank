@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Minibank.Core.Domains.BankAccounts.Repositories;
 using Minibank.Core.Domains.Users.Repositories;
 using Minibank.Core.Exceptions;
 
@@ -8,10 +9,12 @@ namespace Minibank.Core.Domains.Users.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IBankAccountRepository bankAccountRepository)
         {
             _userRepository = userRepository;
+            _bankAccountRepository = bankAccountRepository;
         }
 
         public UserModel GetById(Guid id)
@@ -60,7 +63,7 @@ namespace Minibank.Core.Domains.Users.Services
                 throw new ObjectNotFoundException("User with this guid doesnt exists");
             }
 
-            if (user.AmountOfBankAccounts != 0)
+            if (_bankAccountRepository.GetNumberOfBankAccounts(id) != 0)
             {
                 throw new ValidationException("User have an active bank accounts");
             }

@@ -78,5 +78,10 @@ namespace Minibank.Data.BankAccounts.Repositories
             entity.OpeningDate = bankAccountModel.OpeningDate;
             entity.IsActive = bankAccountModel.IsActive;
         }
+
+        public int GetNumberOfBankAccounts(Guid id)
+        {
+            return _bankAccountStorage.Select(model => model.UserId == id).Count();
+        }
     }
 }
