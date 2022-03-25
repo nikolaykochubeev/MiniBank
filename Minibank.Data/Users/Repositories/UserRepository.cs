@@ -4,15 +4,14 @@ using System.Linq;
 using Minibank.Core.Domains.Users;
 using Minibank.Core.Domains.Users.Repositories;
 using Minibank.Core.Exceptions;
-using Minibank.Data.DbModels;
 
-namespace Minibank.Data.Repositories
+namespace Minibank.Data.Users.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private static List<UserDbModel> _userStorage = new();
 
-        public UserModel Get(Guid id)
+        public UserModel GetById(Guid id)
         {
             var entity = _userStorage.FirstOrDefault(it => it.Id == id);
 

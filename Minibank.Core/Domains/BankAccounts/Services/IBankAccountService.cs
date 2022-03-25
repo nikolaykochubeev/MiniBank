@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Minibank.Core.Domains.Transactions;
 
-namespace Minibank.Core.Domains.BankAccount.Services
+namespace Minibank.Core.Domains.BankAccounts.Services
 {
     public interface IBankAccountService
     {
-        BankAccountModel Get(Guid id);
+        BankAccountModel GetById(Guid id);
         IEnumerable<BankAccountModel> GetAll();
         IEnumerable<TransactionModel> GetAllTransactions();
         Guid Create(BankAccountModel bankAccountModel);

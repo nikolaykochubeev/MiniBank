@@ -14,9 +14,16 @@ namespace Minibank.Core.Domains.Users.Services
             _userRepository = userRepository;
         }
 
-        public UserModel Get(Guid id)
+        public UserModel GetById(Guid id)
         {
-            return _userRepository.Get(id);
+            var user = _userRepository.GetById(id);
+
+            if (user is null)
+            {
+                throw new ObjectNotFoundException("user with this guid does not exist");
+            }
+
+            return user;
         }
 
         public IEnumerable<UserModel> GetAll()
@@ -27,11 +34,15 @@ namespace Minibank.Core.Domains.Users.Services
         public Guid Create(UserModel userModel)
         {
             if (string.IsNullOrEmpty(userModel.Email))
+            {
                 throw new ValidationException("Email can not be the empty string.");
+            }
+
             if (string.IsNullOrEmpty(userModel.Login))
             {
                 throw new ValidationException("Login can not be the empty string.");
             }
+
             return _userRepository.Create(userModel);
         }
 
@@ -42,11 +53,18 @@ namespace Minibank.Core.Domains.Users.Services
 
         public void Delete(Guid id)
         {
-            var user = _userRepository.Get(id);
+            var user = _userRepository.GetById(id);
+
+            if (user is null)
+            {
+                throw new ObjectNotFoundException("User with this guid doesnt exists");
+            }
+
             if (user.AmountOfBankAccounts != 0)
             {
                 throw new ValidationException("User have an active bank accounts");
             }
+
             _userRepository.Delete(id);
         }
     }

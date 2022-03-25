@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Minibank.Core.Domains.BankAccount
+namespace Minibank.Data.BankAccounts
 {
-    public class BankAccountModel
+    public class BankAccountDbModel
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

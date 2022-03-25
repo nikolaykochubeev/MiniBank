@@ -5,7 +5,7 @@ namespace Minibank.Core.Domains.Users.Repositories
 {
     public interface IUserRepository
     {
-        UserModel Get(Guid id);
+        UserModel GetById(Guid id);
         IEnumerable<UserModel> GetAll();
         Guid Create(UserModel userModel);
         void Update(UserModel userModel);

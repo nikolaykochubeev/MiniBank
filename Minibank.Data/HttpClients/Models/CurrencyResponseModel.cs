@@ -8,6 +8,7 @@ namespace Minibank.Data.HttpClients.Models
         public DateTime Date { get; set; }
         public Dictionary<string, ValueItem> Valute { get; set; }
     }
+
     public class ValueItem
     {
         public string ID { get; set; }

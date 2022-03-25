@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Minibank.Data.DbModels
+namespace Minibank.Data.Transactions
 {
     public class TransactionDbModel
     {

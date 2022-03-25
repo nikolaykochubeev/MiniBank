@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Domains.Users;
 using Minibank.Core.Domains.Users.Services;
-using Minibank.Web.Dto;
+using Minibank.Web.Controllers.Users.Dto;
 
 namespace Minibank.Web.Controllers
 {
@@ -20,9 +20,9 @@ namespace Minibank.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public UserModel Get(Guid id)
+        public UserModel GetById(Guid id)
         {
-            var model = _userService.Get(id);
+            var model = _userService.GetById(id);
 
             return new UserModel
             {
@@ -69,7 +69,7 @@ namespace Minibank.Web.Controllers
         }
         
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public void DeleteById(Guid id)
         {
             _userService.Delete(id);
         }

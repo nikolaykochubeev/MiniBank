@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Minibank.Web.Dto
+namespace Minibank.Web.Controllers.BankAccounts.Dto
 {
     public class BankAccountDto
     {

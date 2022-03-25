@@ -5,7 +5,7 @@ namespace Minibank.Core.Domains.Transactions.Repositories
 {
     public interface ITransactionRepository
     {
-        TransactionModel Get(Guid id);
+        TransactionModel GetById(Guid id);
         IEnumerable<TransactionModel> GetAll();
         Guid Create(TransactionModel transactionModel);
         void Update(TransactionModel transactionModel);

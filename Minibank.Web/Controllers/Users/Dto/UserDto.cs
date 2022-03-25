@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Minibank.Web.Dto
+﻿namespace Minibank.Web.Controllers.Users.Dto
 {
     public class UserDto
     {

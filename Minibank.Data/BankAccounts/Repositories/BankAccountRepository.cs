@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Minibank.Core.Domains.BankAccount;
-using Minibank.Core.Domains.BankAccount.Repositories;
+using Minibank.Core.Domains.BankAccounts;
+using Minibank.Core.Domains.BankAccounts.Repositories;
 using Minibank.Core.Exceptions;
-using Minibank.Data.DbModels;
 
-namespace Minibank.Data.Repositories
+namespace Minibank.Data.BankAccounts.Repositories
 {
     public class BankAccountRepository : IBankAccountRepository
     {
         private static List<BankAccountDbModel> _bankAccountStorage = new();
 
-        public BankAccountModel Get(Guid id)
+        public BankAccountModel GetById(Guid id)
         {
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
 
@@ -59,6 +58,7 @@ namespace Minibank.Data.Repositories
                 OpeningDate = bankAccountModel.OpeningDate,
                 ClosingDate = bankAccountModel.ClosingDate
             };
+
             _bankAccountStorage.Add(entity);
         }
 

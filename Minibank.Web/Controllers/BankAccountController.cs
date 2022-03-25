@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Minibank.Core.Domains.BankAccount;
-using Minibank.Core.Domains.BankAccount.Services;
+using Minibank.Core.Domains.BankAccounts;
+using Minibank.Core.Domains.BankAccounts.Services;
 using Minibank.Core.Domains.Transactions;
-using Minibank.Web.Dto;
+using Minibank.Web.Controllers.BankAccounts.Dto;
 
 namespace Minibank.Web.Controllers
 {
@@ -21,9 +21,9 @@ namespace Minibank.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public Task<BankAccountModel> Get(Guid id)
+        public Task<BankAccountModel> GetById(Guid id)
         {
-            return Task.FromResult(_bankAccountService.Get(id));
+            return Task.FromResult(_bankAccountService.GetById(id));
         }
 
         [HttpGet]
@@ -74,8 +74,8 @@ namespace Minibank.Web.Controllers
             });
         }
 
-        [HttpPut("{id}")]
-        public void Close(Guid id)
+        [HttpPost("{id}")]
+        public void CloseById(Guid id)
         {
             _bankAccountService.Close(id);
         }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Minibank.Core.Domains.BankAccount.Services;
+using Minibank.Core.Domains.BankAccounts.Services;
 using Minibank.Core.Domains.Currency.Services;
 using Minibank.Core.Domains.Users.Services;
 

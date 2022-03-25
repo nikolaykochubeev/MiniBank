@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Minibank.Core.Domains.BankAccount.Repositories;
+using Minibank.Core.Domains.BankAccounts.Repositories;
 using Minibank.Core.Domains.Currency.Services;
 using Minibank.Core.Domains.Transactions;
 using Minibank.Core.Domains.Transactions.Repositories;
 using Minibank.Core.Domains.Users;
 using Minibank.Core.Domains.Users.Repositories;
-using Minibank.Core.Domains.Users.Services;
 using Minibank.Core.Exceptions;
 
-namespace Minibank.Core.Domains.BankAccount.Services
+namespace Minibank.Core.Domains.BankAccounts.Services
 {
     public class BankAccountService : IBankAccountService
     {
@@ -28,15 +26,23 @@ namespace Minibank.Core.Domains.BankAccount.Services
             _currencyService = currencyService;
         }
 
-        public BankAccountModel Get(Guid id)
+        public BankAccountModel GetById(Guid id)
         {
-            return _bankAccountRepository.Get(id);
+            var bankAccount = _bankAccountRepository.GetById(id);
+
+            if (bankAccount is null)
+            {
+                throw new ObjectNotFoundException("bankAccount with this guid does not exist");
+            }
+
+            return bankAccount;
         }
 
         public IEnumerable<BankAccountModel> GetAll()
         {
             return _bankAccountRepository.GetAll();
         }
+
         public IEnumerable<TransactionModel> GetAllTransactions()
         {
             return _transactionRepository.GetAll();
@@ -44,10 +50,10 @@ namespace Minibank.Core.Domains.BankAccount.Services
 
         public Guid Create(BankAccountModel bankAccountModel)
         {
-            var user = _userRepository.Get(bankAccountModel.UserId);
+            var user = _userRepository.GetById(bankAccountModel.UserId);
             if (user is null)
             {
-                throw new ValidationException("User with this guid does not exist");
+                throw new ObjectNotFoundException("User with this guid does not exist");
             }
 
             if (bankAccountModel.AmountOfMoney <= decimal.Zero)
@@ -84,8 +90,8 @@ namespace Minibank.Core.Domains.BankAccount.Services
 
         public decimal CalculateCommission(TransactionModel transactionModel)
         {
-            var fromAccount = _bankAccountRepository.Get(transactionModel.FromAccountId);
-            var toAccount = _bankAccountRepository.Get(transactionModel.ToAccountId);
+            var fromAccount = _bankAccountRepository.GetById(transactionModel.FromAccountId);
+            var toAccount = _bankAccountRepository.GetById(transactionModel.ToAccountId);
             if (transactionModel.Currency != "RUB" && transactionModel.Currency != "USD" &&
                 transactionModel.Currency != "EUR")
             {
@@ -110,8 +116,19 @@ namespace Minibank.Core.Domains.BankAccount.Services
 
         public Guid Transfer(TransactionModel transactionModel)
         {
-            var fromAccount = _bankAccountRepository.Get(transactionModel.FromAccountId);
-            var toAccount = _bankAccountRepository.Get(transactionModel.ToAccountId);
+            var fromAccount = _bankAccountRepository.GetById(transactionModel.FromAccountId);
+            var toAccount = _bankAccountRepository.GetById(transactionModel.ToAccountId);
+
+            if (fromAccount is null)
+            {
+                throw new ObjectNotFoundException("fromBankAccount with this guid does not exist");
+            }
+            
+            if (toAccount is null)
+            {
+                throw new ObjectNotFoundException("toBankAccount with this guid does not exist");
+            }
+            
             if (!fromAccount.IsActive)
             {
                 throw new ValidationException("fromAccount is not active");
@@ -166,12 +183,18 @@ namespace Minibank.Core.Domains.BankAccount.Services
                 ClosingDate = toAccount.ClosingDate,
                 IsActive = toAccount.IsActive,
             });
+
             return _transactionRepository.Create(transactionModel);
         }
 
         public void Close(Guid id)
         {
-            var bankAccount = _bankAccountRepository.Get(id);
+            var bankAccount = _bankAccountRepository.GetById(id);
+
+            if (bankAccount is null)
+            {
+                throw new ObjectNotFoundException("BankAccount with this guid does not exist");
+            }
 
             if (bankAccount.AmountOfMoney != decimal.Zero)
             {

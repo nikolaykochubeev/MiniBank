@@ -6,4 +6,4 @@ namespace Minibank.Core.Domains.Currency.Services
     {
         Task<decimal> GetRubleCourse(string currencyCode);
     }
-} 
+}

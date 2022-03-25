@@ -4,15 +4,14 @@ using System.Linq;
 using Minibank.Core.Domains.Transactions;
 using Minibank.Core.Domains.Transactions.Repositories;
 using Minibank.Core.Exceptions;
-using Minibank.Data.DbModels;
 
-namespace Minibank.Data.Repositories
+namespace Minibank.Data.Transactions.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
         private static List<TransactionDbModel> _transactionModelStorage = new();
 
-        public TransactionModel Get(Guid id)
+        public TransactionModel GetById(Guid id)
         {
             var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == id);
 
@@ -53,7 +52,9 @@ namespace Minibank.Data.Repositories
                 FromAccountId = transactionModel.FromAccountId,
                 ToAccountId = transactionModel.ToAccountId
             };
+
             _transactionModelStorage.Add(entity);
+
             return entity.Id;
         }
 
