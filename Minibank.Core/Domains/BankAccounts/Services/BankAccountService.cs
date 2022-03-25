@@ -68,8 +68,8 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 UserId = bankAccountModel.UserId,
                 AmountOfMoney = bankAccountModel.AmountOfMoney,
                 Currency = bankAccountModel.Currency,
-                OpeningDate = bankAccountModel.OpeningDate,
-                ClosingDate = bankAccountModel.ClosingDate,
+                OpeningDate = DateTime.Now,
+                ClosingDate = DateTime.Now.AddYears(4),
                 IsActive = true
             });
             _userRepository.Update(new UserModel
@@ -183,15 +183,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 throw new ValidationException("It is impossible to close an account if there is money left on it");
             }
 
-            _bankAccountRepository.Update(new BankAccountModel
-            {
-                Id = id,
-                AmountOfMoney = bankAccount.AmountOfMoney,
-                Currency = bankAccount.Currency,
-                OpeningDate = bankAccount.OpeningDate,
-                ClosingDate = bankAccount.ClosingDate,
-                IsActive = false,
-            });
+            _bankAccountRepository.Close(bankAccount);
         }
     }
 }

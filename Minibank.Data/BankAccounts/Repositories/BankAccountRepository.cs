@@ -68,7 +68,7 @@ namespace Minibank.Data.BankAccounts.Repositories
 
             if (entity is null)
             {
-                throw new ValidationException("User with this guid doesn't exists");
+                throw new ValidationException("BankAccount with this guid doesn't exists");
             }
 
             entity.UserId = bankAccountModel.UserId;
@@ -82,6 +82,18 @@ namespace Minibank.Data.BankAccounts.Repositories
         public int GetNumberOfBankAccounts(Guid id)
         {
             return _bankAccountStorage.Select(model => model.UserId == id).Count();
+        }
+        public void Close(BankAccountModel bankAccountModel)
+        {
+            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
+
+            if (entity is null)
+            {
+                throw new ValidationException("User with this guid doesn't exists");
+            }
+            
+            entity.ClosingDate = DateTime.Now;
+            entity.IsActive = false;
         }
     }
 }
