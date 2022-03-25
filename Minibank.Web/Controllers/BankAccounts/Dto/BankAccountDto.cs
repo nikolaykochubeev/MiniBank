@@ -1,4 +1,5 @@
 ﻿using System;
+using Minibank.Core.Domains.Currency;
 
 namespace Minibank.Web.Controllers.BankAccounts.Dto
 {
@@ -6,6 +7,6 @@ namespace Minibank.Web.Controllers.BankAccounts.Dto
     {
         public Guid UserId { get; set; }
         public decimal AmountOfMoney { get; set; }
-        public string Currency { get; set; }
+        public CurrencyModel Currency { get; set; }
     }
 }

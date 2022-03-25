@@ -61,12 +61,6 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 throw new ValidationException("The amount of money cannot be negative.");
             }
 
-            if (bankAccountModel.Currency != "RUB" && bankAccountModel.Currency != "USD" &&
-                bankAccountModel.Currency != "EUR")
-            {
-                throw new ValidationException("It is impossible to create a bank account with this currency");
-            }
-
             var bankAccountId = Guid.NewGuid();
             _bankAccountRepository.Create(new BankAccountModel
             {
@@ -91,11 +85,6 @@ namespace Minibank.Core.Domains.BankAccounts.Services
         {
             var fromAccount = _bankAccountRepository.GetById(transactionModel.FromAccountId);
             var toAccount = _bankAccountRepository.GetById(transactionModel.ToAccountId);
-            if (transactionModel.Currency != "RUB" && transactionModel.Currency != "USD" &&
-                transactionModel.Currency != "EUR")
-            {
-                throw new ValidationException("It is impossible to create a bank account with this currency");
-            }
 
             if (toAccount.Currency != transactionModel.Currency)
             {
@@ -106,7 +95,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             var transactionMoney = transactionModel.AmountOfMoney;
             if (toAccount.Currency != fromAccount.Currency)
             {
-                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency, toAccount.Currency)
+                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(), toAccount.Currency.ToString())
                     .Result;
             }
 
@@ -138,12 +127,6 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 throw new ValidationException("toAccount is not active");
             }
 
-            if (transactionModel.Currency != "RUB" && transactionModel.Currency != "USD" &&
-                transactionModel.Currency != "EUR")
-            {
-                throw new ValidationException("It is impossible to create a bank account with this currency");
-            }
-
             if (toAccount.Currency != transactionModel.Currency)
             {
                 throw new ValidationException(
@@ -154,7 +137,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             var commission = CalculateCommission(transactionModel);
             if (toAccount.Currency != fromAccount.Currency)
             {
-                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency, toAccount.Currency)
+                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(), toAccount.Currency.ToString())
                     .Result;
             }
 

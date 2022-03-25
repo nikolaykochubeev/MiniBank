@@ -6,6 +6,7 @@ using Minibank.Core.Domains.BankAccounts;
 using Minibank.Core.Domains.BankAccounts.Services;
 using Minibank.Core.Domains.Transactions;
 using Minibank.Web.Controllers.BankAccounts.Dto;
+using Minibank.Web.Controllers.Transactions.Dto;
 
 namespace Minibank.Web.Controllers
 {

@@ -1,11 +1,12 @@
 ﻿using System;
+using Minibank.Core.Domains.Currency;
 
-namespace Minibank.Web.Controllers.BankAccounts.Dto
+namespace Minibank.Web.Controllers.Transactions.Dto
 {
     public class TransactionDto
     {
         public decimal AmountOfMoney { get; set; }
-        public string Currency { get; set; }
+        public CurrencyModel Currency { get; set; }
         public Guid FromAccountId { get; set; }
         public Guid ToAccountId { get; set; }
     }
