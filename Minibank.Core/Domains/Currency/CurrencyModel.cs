@@ -1,4 +1,6 @@
-﻿namespace Minibank.Core.Domains.Currency
+﻿using System.Text.Json.Serialization;
+
+namespace Minibank.Core.Domains.Currency
 {
     public enum CurrencyModel
     {

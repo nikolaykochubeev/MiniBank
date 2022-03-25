@@ -26,7 +26,7 @@ namespace Minibank.Data.HttpClients
             var response = await GetRubleCourses();
             var valute = response.Valute[currencyCode];
 
-            return (decimal)(valute.Value / valute.Nominal);
+            return ((decimal)valute.Value / valute.Nominal);
         }
 
         private async Task<CurrencyResponseModel> GetRubleCourses()

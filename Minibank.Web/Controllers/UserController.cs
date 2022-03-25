@@ -61,8 +61,8 @@ namespace Minibank.Web.Controllers
             _userService.Update(new UserModel
             {
                 Id = id,
-                Email = model.Email,
-                Login = model.Email
+                Login = model.Login,
+                Email = model.Email
             });
         }
         
