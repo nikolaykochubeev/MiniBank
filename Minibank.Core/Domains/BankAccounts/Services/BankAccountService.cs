@@ -95,7 +95,8 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             var transactionMoney = transactionModel.AmountOfMoney;
             if (toAccount.Currency != fromAccount.Currency)
             {
-                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(), toAccount.Currency.ToString())
+                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(),
+                        toAccount.Currency.ToString())
                     .Result;
             }
 
@@ -111,12 +112,12 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             {
                 throw new ObjectNotFoundException("fromBankAccount with this guid does not exist");
             }
-            
+
             if (toAccount is null)
             {
                 throw new ObjectNotFoundException("toBankAccount with this guid does not exist");
             }
-            
+
             if (!fromAccount.IsActive)
             {
                 throw new ValidationException("fromAccount is not active");
@@ -137,7 +138,8 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             var commission = CalculateCommission(transactionModel);
             if (toAccount.Currency != fromAccount.Currency)
             {
-                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(), toAccount.Currency.ToString())
+                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(),
+                        toAccount.Currency.ToString())
                     .Result;
             }
 
@@ -151,6 +153,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             {
                 Id = fromAccount.Id,
                 AmountOfMoney = fromAccount.AmountOfMoney - transactionMoney - commission,
+                UserId = fromAccount.UserId,
                 Currency = fromAccount.Currency,
                 OpeningDate = fromAccount.OpeningDate,
                 ClosingDate = fromAccount.ClosingDate,
@@ -160,6 +163,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             {
                 Id = toAccount.Id,
                 AmountOfMoney = toAccount.AmountOfMoney + transactionMoney,
+                UserId = fromAccount.UserId,
                 Currency = toAccount.Currency,
                 OpeningDate = toAccount.OpeningDate,
                 ClosingDate = toAccount.ClosingDate,
