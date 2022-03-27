@@ -136,13 +136,6 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 throw new ValidationException("There is not enough money on the account for this transfer");
             }
 
-            if (toAccount.Currency != fromAccount.Currency)
-            {
-                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(),
-                        toAccount.Currency.ToString())
-                    .Result;
-            }
-
             _bankAccountRepository.Update(new BankAccountModel
             {
                 Id = fromAccount.Id,
@@ -154,6 +147,13 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 IsActive = fromAccount.IsActive,
             });
 
+            if (toAccount.Currency != fromAccount.Currency)
+            {
+                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(),
+                        toAccount.Currency.ToString())
+                    .Result;
+            }
+            
             _bankAccountRepository.Update(new BankAccountModel
             {
                 Id = toAccount.Id,
