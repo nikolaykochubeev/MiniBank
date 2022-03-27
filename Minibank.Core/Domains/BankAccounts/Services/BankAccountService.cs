@@ -86,19 +86,13 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             var fromAccount = _bankAccountRepository.GetById(transactionModel.FromAccountId);
             var toAccount = _bankAccountRepository.GetById(transactionModel.ToAccountId);
 
-            if (toAccount.Currency != transactionModel.Currency)
+            if (fromAccount.Currency != transactionModel.Currency)
             {
                 throw new ValidationException(
                     "The final currencies of the transaction and the accounts to which the money is received do not match");
             }
 
             var transactionMoney = transactionModel.AmountOfMoney;
-            if (toAccount.Currency != fromAccount.Currency)
-            {
-                transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(),
-                        toAccount.Currency.ToString())
-                    .Result;
-            }
 
             return fromAccount.UserId != toAccount.UserId ? transactionMoney * (decimal)0.02 : 0;
         }
@@ -128,7 +122,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 throw new ValidationException("toAccount is not active");
             }
 
-            if (toAccount.Currency != transactionModel.Currency)
+            if (fromAccount.Currency != transactionModel.Currency)
             {
                 throw new ValidationException(
                     "The final currencies of the transaction and the accounts to which the money is received do not match");
@@ -136,17 +130,17 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             var transactionMoney = transactionModel.AmountOfMoney;
             var commission = CalculateCommission(transactionModel);
+
+            if (fromAccount.AmountOfMoney - transactionMoney - commission < decimal.Zero)
+            {
+                throw new ValidationException("There is not enough money on the account for this transfer");
+            }
+
             if (toAccount.Currency != fromAccount.Currency)
             {
                 transactionMoney = _currencyService.Convert(transactionMoney, fromAccount.Currency.ToString(),
                         toAccount.Currency.ToString())
                     .Result;
-            }
-
-
-            if (fromAccount.AmountOfMoney - transactionMoney - commission < decimal.Zero)
-            {
-                throw new ValidationException("There is not enough money on the account for this transfer");
             }
 
             _bankAccountRepository.Update(new BankAccountModel
@@ -159,6 +153,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 ClosingDate = fromAccount.ClosingDate,
                 IsActive = fromAccount.IsActive,
             });
+
             _bankAccountRepository.Update(new BankAccountModel
             {
                 Id = toAccount.Id,
