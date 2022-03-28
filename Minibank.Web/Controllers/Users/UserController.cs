@@ -6,7 +6,7 @@ using Minibank.Core.Domains.Users;
 using Minibank.Core.Domains.Users.Services;
 using Minibank.Web.Controllers.Users.Dto;
 
-namespace Minibank.Web.Controllers
+namespace Minibank.Web.Controllers.Users
 {
     [ApiController]
     [Route("api/v1/minibank/[controller]/[action]")]

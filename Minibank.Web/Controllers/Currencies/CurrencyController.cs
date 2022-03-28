@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Domains.Currency.Services;
 
-namespace Minibank.Web.Controllers
+namespace Minibank.Web.Controllers.Currencies
 {
     [ApiController]
     [Route("api/v1/minibank/[controller]/[action]")]

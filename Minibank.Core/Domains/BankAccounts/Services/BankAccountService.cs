@@ -72,12 +72,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 ClosingDate = DateTime.Now.AddYears(4),
                 IsActive = true
             });
-            _userRepository.Update(new UserModel
-            {
-                Id = user.Id,
-                Login = user.Login,
-                Email = user.Email,
-            });
+            
             return bankAccountId;
         }
 
@@ -136,16 +131,9 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                 throw new ValidationException("There is not enough money on the account for this transfer");
             }
 
-            _bankAccountRepository.Update(new BankAccountModel
-            {
-                Id = fromAccount.Id,
-                AmountOfMoney = fromAccount.AmountOfMoney - transactionMoney - commission,
-                UserId = fromAccount.UserId,
-                Currency = fromAccount.Currency,
-                OpeningDate = fromAccount.OpeningDate,
-                ClosingDate = fromAccount.ClosingDate,
-                IsActive = fromAccount.IsActive,
-            });
+            fromAccount.AmountOfMoney -= (transactionMoney + commission);
+            
+            _bankAccountRepository.Update(fromAccount);
 
             if (toAccount.Currency != fromAccount.Currency)
             {
@@ -153,17 +141,10 @@ namespace Minibank.Core.Domains.BankAccounts.Services
                         toAccount.Currency.ToString())
                     .Result;
             }
+
+            toAccount.AmountOfMoney += transactionMoney;
             
-            _bankAccountRepository.Update(new BankAccountModel
-            {
-                Id = toAccount.Id,
-                AmountOfMoney = toAccount.AmountOfMoney + transactionMoney,
-                UserId = fromAccount.UserId,
-                Currency = toAccount.Currency,
-                OpeningDate = toAccount.OpeningDate,
-                ClosingDate = toAccount.ClosingDate,
-                IsActive = toAccount.IsActive,
-            });
+            _bankAccountRepository.Update(toAccount);
 
             return _transactionRepository.Create(transactionModel);
         }

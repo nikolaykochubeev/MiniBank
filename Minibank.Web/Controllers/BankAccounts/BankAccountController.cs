@@ -8,7 +8,7 @@ using Minibank.Core.Domains.Transactions;
 using Minibank.Web.Controllers.BankAccounts.Dto;
 using Minibank.Web.Controllers.Transactions.Dto;
 
-namespace Minibank.Web.Controllers
+namespace Minibank.Web.Controllers.BankAccounts
 {
     [ApiController]
     [Route("api/v1/minibank/[controller]/[action]")]
@@ -22,9 +22,9 @@ namespace Minibank.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public Task<BankAccountModel> GetById(Guid id)
+        public BankAccountModel GetById(Guid id)
         {
-            return Task.FromResult(_bankAccountService.GetById(id));
+            return _bankAccountService.GetById(id);
         }
 
         [HttpGet]

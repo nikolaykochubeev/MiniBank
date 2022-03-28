@@ -63,7 +63,7 @@ namespace Minibank.Core.Domains.Users.Services
                 throw new ObjectNotFoundException("User with this guid doesnt exists");
             }
 
-            if (_bankAccountRepository.GetNumberOfBankAccounts(id) != 0)
+            if (_bankAccountRepository.IsAnyBankAccount(id))
             {
                 throw new ValidationException("User have an active bank accounts");
             }

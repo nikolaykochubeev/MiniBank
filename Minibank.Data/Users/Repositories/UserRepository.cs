@@ -68,10 +68,12 @@ namespace Minibank.Data.Users.Repositories
         {
             var entity = _userStorage.FirstOrDefault(it => it.Id == id);
 
-            if (entity is not null)
+            if (entity is null)
             {
-                _userStorage.Remove(entity);
+                throw new ValidationException("User with this guid doesn't exists");
             }
+
+            _userStorage.Remove(entity);
         }
     }
 }

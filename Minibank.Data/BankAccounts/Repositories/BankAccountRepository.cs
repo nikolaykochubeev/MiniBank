@@ -79,9 +79,9 @@ namespace Minibank.Data.BankAccounts.Repositories
             entity.IsActive = bankAccountModel.IsActive;
         }
 
-        public int GetNumberOfBankAccounts(Guid id)
+        public bool IsAnyBankAccount(Guid id)
         {
-            return _bankAccountStorage.Select(model => model.UserId == id).Count();
+            return _bankAccountStorage.Any(model => model.UserId == id);
         }
         public void Close(BankAccountModel bankAccountModel)
         {

@@ -13,8 +13,4 @@
       <ProjectReference Include="..\Minibank.Data\Minibank.Data.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers\BankAccounts" />
-    </ItemGroup>
-
 </Project>
