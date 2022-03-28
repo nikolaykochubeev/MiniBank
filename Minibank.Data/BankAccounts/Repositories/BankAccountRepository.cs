@@ -79,10 +79,22 @@ namespace Minibank.Data.BankAccounts.Repositories
             entity.IsActive = bankAccountModel.IsActive;
         }
 
+        public void UpdateAmount(Guid id, decimal amount)
+        {
+            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
+            if (entity == null)
+            {
+                throw new ObjectNotFoundException("BankAccount with this Guid does not exists");
+            }
+
+            entity.AmountOfMoney = amount;
+        }
+
         public bool IsAnyBankAccount(Guid id)
         {
             return _bankAccountStorage.Any(model => model.UserId == id);
         }
+
         public void Close(BankAccountModel bankAccountModel)
         {
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
@@ -91,7 +103,7 @@ namespace Minibank.Data.BankAccounts.Repositories
             {
                 throw new ValidationException("User with this guid doesn't exists");
             }
-            
+
             entity.ClosingDate = DateTime.Now;
             entity.IsActive = false;
         }

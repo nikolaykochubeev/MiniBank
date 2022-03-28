@@ -133,7 +133,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             fromAccount.AmountOfMoney -= (transactionMoney + commission);
             
-            _bankAccountRepository.Update(fromAccount);
+            _bankAccountRepository.UpdateAmount(fromAccount.Id, fromAccount.AmountOfMoney);
 
             if (toAccount.Currency != fromAccount.Currency)
             {
@@ -144,7 +144,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             toAccount.AmountOfMoney += transactionMoney;
             
-            _bankAccountRepository.Update(toAccount);
+            _bankAccountRepository.UpdateAmount(toAccount.Id, toAccount.AmountOfMoney);
 
             return _transactionRepository.Create(transactionModel);
         }

@@ -10,6 +10,7 @@ namespace Minibank.Core.Domains.BankAccounts.Repositories
         void Create(BankAccountModel bankAccountModel);
         void Update(BankAccountModel bankAccountModel);
         void Close(BankAccountModel bankAccountModel);
+        void UpdateAmount(Guid id, decimal amount);
         bool IsAnyBankAccount(Guid id);
     }
 }
