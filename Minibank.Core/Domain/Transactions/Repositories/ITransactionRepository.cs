@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Minibank.Core.Domains.Transactions.Repositories
+namespace Minibank.Core.Domain.Transactions.Repositories
 {
     public interface ITransactionRepository
     {

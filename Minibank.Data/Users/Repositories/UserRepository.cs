@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Minibank.Core.Domains.Users;
-using Minibank.Core.Domains.Users.Repositories;
+using Minibank.Core.Domain.Users;
+using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
 
 namespace Minibank.Data.Users.Repositories
@@ -57,7 +57,7 @@ namespace Minibank.Data.Users.Repositories
 
             if (entity is null)
             {
-                throw new ValidationException("User with this guid doesn't exists");
+                throw new ValidationException($"User with id = {userModel.Id} doesn't exists");
             }
 
             entity.Email = userModel.Email;
@@ -70,7 +70,7 @@ namespace Minibank.Data.Users.Repositories
 
             if (entity is null)
             {
-                throw new ValidationException("User with this guid doesn't exists");
+                throw new ValidationException($"User with id = {id} doesn't exists");
             }
 
             _userStorage.Remove(entity);

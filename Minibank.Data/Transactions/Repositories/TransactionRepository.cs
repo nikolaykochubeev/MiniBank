@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Minibank.Core.Domains.Transactions;
-using Minibank.Core.Domains.Transactions.Repositories;
+using Minibank.Core.Domain.Transactions;
+using Minibank.Core.Domain.Transactions.Repositories;
 using Minibank.Core.Exceptions;
 
 namespace Minibank.Data.Transactions.Repositories
@@ -64,7 +64,7 @@ namespace Minibank.Data.Transactions.Repositories
 
             if (entity is null)
             {
-                throw new ValidationException("Transfer with this guid doesn't exists");
+                throw new ValidationException($"Transfer with id = {transactionModel.Id} doesn't exists");
             }
 
             entity.AmountOfMoney = transactionModel.AmountOfMoney;

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Minibank.Core.Domains.BankAccounts.Repositories;
-using Minibank.Core.Domains.Currency.Services;
-using Minibank.Core.Domains.Transactions;
-using Minibank.Core.Domains.Transactions.Repositories;
-using Minibank.Core.Domains.Users;
-using Minibank.Core.Domains.Users.Repositories;
+using Minibank.Core.Domain.BankAccounts.Repositories;
+using Minibank.Core.Domain.Currency.Services;
+using Minibank.Core.Domain.Transactions;
+using Minibank.Core.Domain.Transactions.Repositories;
+using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
 
-namespace Minibank.Core.Domains.BankAccounts.Services
+namespace Minibank.Core.Domain.BankAccounts.Services
 {
     public class BankAccountService : IBankAccountService
     {
@@ -32,7 +31,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             if (bankAccount is null)
             {
-                throw new ObjectNotFoundException("bankAccount with this guid does not exist");
+                throw new ObjectNotFoundException($"BankAccount with id = {id} does not exist");
             }
 
             return bankAccount;
@@ -53,12 +52,12 @@ namespace Minibank.Core.Domains.BankAccounts.Services
             var user = _userRepository.GetById(bankAccountModel.UserId);
             if (user is null)
             {
-                throw new ObjectNotFoundException("User with this guid does not exist");
+                throw new ObjectNotFoundException($"User with id = {bankAccountModel.UserId} does not exist");
             }
 
             if (bankAccountModel.AmountOfMoney <= decimal.Zero)
             {
-                throw new ValidationException("The amount of money cannot be negative.");
+                throw new ValidationException("Unable to create an account, the amount of money cannot be negative.");
             }
 
             var bankAccountId = Guid.NewGuid();
@@ -99,12 +98,12 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             if (fromAccount is null)
             {
-                throw new ObjectNotFoundException("fromBankAccount with this guid does not exist");
+                throw new ObjectNotFoundException($"fromBankAccount with id = {transactionModel.FromAccountId} does not exist");
             }
 
             if (toAccount is null)
             {
-                throw new ObjectNotFoundException("toBankAccount with this guid does not exist");
+                throw new ObjectNotFoundException($"toBankAccount with id = {transactionModel.ToAccountId} does not exist");
             }
 
             if (!fromAccount.IsActive)
@@ -128,7 +127,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             if (fromAccount.AmountOfMoney - transactionMoney - commission < decimal.Zero)
             {
-                throw new ValidationException("There is not enough money on the account for this transfer");
+                throw new ValidationException($"There is not enough money on the fromBankAccount with id = {fromAccount.Id} for this transfer");
             }
 
             fromAccount.AmountOfMoney -= (transactionMoney + commission);
@@ -155,7 +154,7 @@ namespace Minibank.Core.Domains.BankAccounts.Services
 
             if (bankAccount is null)
             {
-                throw new ObjectNotFoundException("BankAccount with this guid does not exist");
+                throw new ObjectNotFoundException($"BankAccount with id = {id} does not exist");
             }
 
             if (bankAccount.AmountOfMoney != decimal.Zero)

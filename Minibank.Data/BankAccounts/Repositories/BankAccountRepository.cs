@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Minibank.Core.Domains.BankAccounts;
-using Minibank.Core.Domains.BankAccounts.Repositories;
+using Minibank.Core.Domain.BankAccounts;
+using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Exceptions;
 
 namespace Minibank.Data.BankAccounts.Repositories
@@ -50,7 +50,7 @@ namespace Minibank.Data.BankAccounts.Repositories
         {
             var entity = new BankAccountDbModel()
             {
-                Id = Guid.NewGuid(),
+                Id = bankAccountModel.Id,
                 UserId = bankAccountModel.UserId,
                 AmountOfMoney = bankAccountModel.AmountOfMoney,
                 Currency = bankAccountModel.Currency,
@@ -68,7 +68,7 @@ namespace Minibank.Data.BankAccounts.Repositories
 
             if (entity is null)
             {
-                throw new ValidationException("BankAccount with this guid doesn't exists");
+                throw new ValidationException($"BankAccount with id = {bankAccountModel.Id} doesn't exists");
             }
 
             entity.UserId = bankAccountModel.UserId;
@@ -84,13 +84,13 @@ namespace Minibank.Data.BankAccounts.Repositories
             var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
             if (entity == null)
             {
-                throw new ObjectNotFoundException("BankAccount with this Guid does not exists");
+                throw new ObjectNotFoundException($"BankAccount id = {id} does not exists");
             }
 
             entity.AmountOfMoney = amount;
         }
 
-        public bool IsAnyBankAccount(Guid id)
+        public bool AnyBankAccount(Guid id)
         {
             return _bankAccountStorage.Any(model => model.UserId == id);
         }
@@ -101,7 +101,7 @@ namespace Minibank.Data.BankAccounts.Repositories
 
             if (entity is null)
             {
-                throw new ValidationException("User with this guid doesn't exists");
+                throw new ValidationException($"BankAccount with id = {bankAccountModel.Id} doesn't exists");
             }
 
             entity.ClosingDate = DateTime.Now;

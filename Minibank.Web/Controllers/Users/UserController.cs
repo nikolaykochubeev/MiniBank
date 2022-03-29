@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Minibank.Core.Domains.Users;
-using Minibank.Core.Domains.Users.Services;
+using Minibank.Core.Domain.Users;
+using Minibank.Core.Domain.Users.Services;
 using Minibank.Web.Controllers.Users.Dto;
 
 namespace Minibank.Web.Controllers.Users

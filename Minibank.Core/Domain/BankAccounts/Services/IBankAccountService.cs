@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Minibank.Core.Domains.Transactions;
+using Minibank.Core.Domain.Transactions;
 
-namespace Minibank.Core.Domains.BankAccounts.Services
+namespace Minibank.Core.Domain.BankAccounts.Services
 {
     public interface IBankAccountService
     {

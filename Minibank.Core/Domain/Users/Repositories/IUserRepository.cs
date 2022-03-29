@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Minibank.Core.Domains.Users.Repositories
+namespace Minibank.Core.Domain.Users.Repositories
 {
     public interface IUserRepository
     {

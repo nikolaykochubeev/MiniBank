@@ -1,7 +1,7 @@
 ﻿using System;
-using Minibank.Core.Domains.Currency;
+using Minibank.Core.Domain.Currency;
 
-namespace Minibank.Core.Domains.BankAccounts
+namespace Minibank.Core.Domain.BankAccounts
 {
     public class BankAccountModel
     {

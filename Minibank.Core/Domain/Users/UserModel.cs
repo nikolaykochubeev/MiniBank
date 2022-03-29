@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Minibank.Core.Domains.Users
+namespace Minibank.Core.Domain.Users
 {
     public class UserModel
     {

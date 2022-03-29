@@ -1,5 +1,5 @@
 ﻿using System;
-using Minibank.Core.Domains.Currency;
+using Minibank.Core.Domain.Currency;
 
 namespace Minibank.Web.Controllers.Transactions.Dto
 {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Minibank.Core.Domains.BankAccounts;
-using Minibank.Core.Domains.BankAccounts.Services;
-using Minibank.Core.Domains.Transactions;
+using Minibank.Core.Domain.BankAccounts;
+using Minibank.Core.Domain.BankAccounts.Services;
+using Minibank.Core.Domain.Transactions;
 using Minibank.Web.Controllers.BankAccounts.Dto;
 using Minibank.Web.Controllers.Transactions.Dto;
 

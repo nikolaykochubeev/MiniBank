@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Minibank.Core.Domains.BankAccounts.Repositories
+namespace Minibank.Core.Domain.BankAccounts.Repositories
 {
     public interface IBankAccountRepository
     {
@@ -11,6 +11,6 @@ namespace Minibank.Core.Domains.BankAccounts.Repositories
         void Update(BankAccountModel bankAccountModel);
         void Close(BankAccountModel bankAccountModel);
         void UpdateAmount(Guid id, decimal amount);
-        bool IsAnyBankAccount(Guid id);
+        bool AnyBankAccount(Guid id);
     }
 }

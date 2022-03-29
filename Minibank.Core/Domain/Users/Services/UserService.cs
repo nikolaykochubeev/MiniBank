@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Minibank.Core.Domains.BankAccounts.Repositories;
-using Minibank.Core.Domains.Users.Repositories;
+using Minibank.Core.Domain.BankAccounts.Repositories;
+using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
 
-namespace Minibank.Core.Domains.Users.Services
+namespace Minibank.Core.Domain.Users.Services
 {
     public class UserService : IUserService
     {
@@ -23,7 +23,7 @@ namespace Minibank.Core.Domains.Users.Services
 
             if (user is null)
             {
-                throw new ObjectNotFoundException("user with this guid does not exist");
+                throw new ObjectNotFoundException($"User with id = {id} does not exist");
             }
 
             return user;
@@ -36,12 +36,12 @@ namespace Minibank.Core.Domains.Users.Services
 
         public Guid Create(UserModel userModel)
         {
-            if (string.IsNullOrEmpty(userModel.Email))
+            if (string.IsNullOrEmpty(userModel.Email) || string.IsNullOrWhiteSpace(userModel.Email))
             {
                 throw new ValidationException("Email can not be the empty string.");
             }
 
-            if (string.IsNullOrEmpty(userModel.Login))
+            if (string.IsNullOrWhiteSpace(userModel.Login) || string.IsNullOrWhiteSpace(userModel.Login))
             {
                 throw new ValidationException("Login can not be the empty string.");
             }
@@ -60,12 +60,12 @@ namespace Minibank.Core.Domains.Users.Services
 
             if (user is null)
             {
-                throw new ObjectNotFoundException("User with this guid doesnt exists");
+                throw new ObjectNotFoundException($"User with id = {id} doesnt exists");
             }
 
-            if (_bankAccountRepository.IsAnyBankAccount(id))
+            if (_bankAccountRepository.AnyBankAccount(id))
             {
-                throw new ValidationException("User have an active bank accounts");
+                throw new ValidationException($"User with id = {id} have an active bank accounts");
             }
 
             _userRepository.Delete(id);

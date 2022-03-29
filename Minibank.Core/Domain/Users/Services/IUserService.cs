@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Minibank.Core.Domains.Users.Services
+namespace Minibank.Core.Domain.Users.Services
 {
     public interface IUserService
     {
