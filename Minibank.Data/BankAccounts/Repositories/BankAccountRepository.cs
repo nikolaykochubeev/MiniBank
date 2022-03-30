@@ -90,7 +90,7 @@ namespace Minibank.Data.BankAccounts.Repositories
             entity.AmountOfMoney = amount;
         }
 
-        public bool AnyBankAccount(Guid id)
+        public bool Any(Guid id)
         {
             return _bankAccountStorage.Any(model => model.UserId == id);
         }

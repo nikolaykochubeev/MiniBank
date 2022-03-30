@@ -36,12 +36,12 @@ namespace Minibank.Core.Domain.Users.Services
 
         public Guid Create(UserModel userModel)
         {
-            if (string.IsNullOrEmpty(userModel.Email) || string.IsNullOrWhiteSpace(userModel.Email))
+            if (string.IsNullOrWhiteSpace(userModel.Email))
             {
                 throw new ValidationException("Email can not be the empty string.");
             }
 
-            if (string.IsNullOrWhiteSpace(userModel.Login) || string.IsNullOrWhiteSpace(userModel.Login))
+            if (string.IsNullOrWhiteSpace(userModel.Login))
             {
                 throw new ValidationException("Login can not be the empty string.");
             }
@@ -63,7 +63,7 @@ namespace Minibank.Core.Domain.Users.Services
                 throw new ObjectNotFoundException($"User with id = {id} doesnt exists");
             }
 
-            if (_bankAccountRepository.AnyBankAccount(id))
+            if (_bankAccountRepository.Any(id))
             {
                 throw new ValidationException($"User with id = {id} have an active bank accounts");
             }
