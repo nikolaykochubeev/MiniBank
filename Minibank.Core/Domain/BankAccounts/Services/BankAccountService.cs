@@ -15,14 +15,17 @@ namespace Minibank.Core.Domain.BankAccounts.Services
         private readonly IUserRepository _userRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly ICurrencyService _currencyService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BankAccountService(IBankAccountRepository bankAccountRepository, IUserRepository userRepository,
+        public BankAccountService(IUnitOfWork unitOfWork, IBankAccountRepository bankAccountRepository,
+            IUserRepository userRepository,
             ITransactionRepository transactionRepository, ICurrencyService currencyService)
         {
             _bankAccountRepository = bankAccountRepository;
             _userRepository = userRepository;
             _transactionRepository = transactionRepository;
             _currencyService = currencyService;
+            _unitOfWork = unitOfWork;
         }
 
         public BankAccountModel GetById(Guid id)
@@ -71,7 +74,8 @@ namespace Minibank.Core.Domain.BankAccounts.Services
                 ClosingDate = DateTime.Now.AddYears(4),
                 IsActive = true
             });
-            
+            _unitOfWork.SaveChanges();
+
             return bankAccountId;
         }
 
@@ -98,12 +102,14 @@ namespace Minibank.Core.Domain.BankAccounts.Services
 
             if (fromAccount is null)
             {
-                throw new ObjectNotFoundException($"fromBankAccount with id = {transactionModel.FromAccountId} does not exist");
+                throw new ObjectNotFoundException(
+                    $"fromBankAccount with id = {transactionModel.FromAccountId} does not exist");
             }
 
             if (toAccount is null)
             {
-                throw new ObjectNotFoundException($"toBankAccount with id = {transactionModel.ToAccountId} does not exist");
+                throw new ObjectNotFoundException(
+                    $"toBankAccount with id = {transactionModel.ToAccountId} does not exist");
             }
 
             if (!fromAccount.IsActive)
@@ -127,11 +133,12 @@ namespace Minibank.Core.Domain.BankAccounts.Services
 
             if (fromAccount.AmountOfMoney - transactionMoney - commission < decimal.Zero)
             {
-                throw new ValidationException($"There is not enough money on the fromBankAccount with id = {fromAccount.Id} for this transfer");
+                throw new ValidationException(
+                    $"There is not enough money on the fromBankAccount with id = {fromAccount.Id} for this transfer");
             }
 
             fromAccount.AmountOfMoney -= (transactionMoney + commission);
-            
+
             _bankAccountRepository.UpdateAmount(fromAccount.Id, fromAccount.AmountOfMoney);
 
             if (toAccount.Currency != fromAccount.Currency)
@@ -142,10 +149,12 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             }
 
             toAccount.AmountOfMoney += transactionMoney;
-            
             _bankAccountRepository.UpdateAmount(toAccount.Id, toAccount.AmountOfMoney);
 
-            return _transactionRepository.Create(transactionModel);
+            var transaction = _transactionRepository.Create(transactionModel);
+            _unitOfWork.SaveChanges();
+
+            return transaction;
         }
 
         public void Close(Guid id)
@@ -163,6 +172,7 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             }
 
             _bankAccountRepository.Close(bankAccount);
+            _unitOfWork.SaveChanges();
         }
     }
 }

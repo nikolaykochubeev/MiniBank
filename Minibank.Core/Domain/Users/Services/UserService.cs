@@ -10,11 +10,13 @@ namespace Minibank.Core.Domain.Users.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUserRepository userRepository, IBankAccountRepository bankAccountRepository)
+        public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository, IBankAccountRepository bankAccountRepository)
         {
             _userRepository = userRepository;
             _bankAccountRepository = bankAccountRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public UserModel GetById(Guid id)
@@ -46,12 +48,15 @@ namespace Minibank.Core.Domain.Users.Services
                 throw new ValidationException("Login can not be the empty string.");
             }
 
-            return _userRepository.Create(userModel);
+            var user = _userRepository.Create(userModel);
+            _unitOfWork.SaveChanges();
+            return user;
         }
 
         public void Update(UserModel userModel)
         {
             _userRepository.Update(userModel);
+            _unitOfWork.SaveChanges();
         }
 
         public void Delete(Guid id)
@@ -69,6 +74,7 @@ namespace Minibank.Core.Domain.Users.Services
             }
 
             _userRepository.Delete(id);
+            _unitOfWork.SaveChanges();
         }
     }
 }
