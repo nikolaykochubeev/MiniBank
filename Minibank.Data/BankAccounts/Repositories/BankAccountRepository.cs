@@ -9,11 +9,16 @@ namespace Minibank.Data.BankAccounts.Repositories
 {
     public class BankAccountRepository : IBankAccountRepository
     {
-        private static List<BankAccountDbModel> _bankAccountStorage = new();
+        private readonly MiniBankContext _context;
+
+        public BankAccountRepository(MiniBankContext context)
+        {
+            _context = context;
+        }
 
         public BankAccountModel GetById(Guid id)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
+            var entity = _context.BankAccounts.FirstOrDefault(it => it.Id == id);
 
             if (entity is null)
             {
@@ -34,7 +39,7 @@ namespace Minibank.Data.BankAccounts.Repositories
 
         public IEnumerable<BankAccountModel> GetAll()
         {
-            return _bankAccountStorage.Select(entity => new BankAccountModel()
+            return _context.BankAccounts.Select(entity => new BankAccountModel()
             {
                 Id = entity.Id,
                 UserId = entity.UserId,
@@ -59,12 +64,12 @@ namespace Minibank.Data.BankAccounts.Repositories
                 ClosingDate = bankAccountModel.ClosingDate
             };
 
-            _bankAccountStorage.Add(entity);
+            _context.BankAccounts.Add(entity);
         }
 
         public void Update(BankAccountModel bankAccountModel)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
+            var entity = _context.BankAccounts.FirstOrDefault(it => it.Id == bankAccountModel.Id);
 
             if (entity is null)
             {
@@ -81,7 +86,7 @@ namespace Minibank.Data.BankAccounts.Repositories
 
         public void UpdateAmount(Guid id, decimal amount)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
+            var entity = _context.BankAccounts.FirstOrDefault(it => it.Id == id);
             if (entity == null)
             {
                 throw new ObjectNotFoundException($"BankAccount id = {id} does not exists");
@@ -92,12 +97,12 @@ namespace Minibank.Data.BankAccounts.Repositories
 
         public bool Any(Guid id)
         {
-            return _bankAccountStorage.Any(model => model.UserId == id);
+            return _context.BankAccounts.Any(model => model.UserId == id);
         }
 
         public void Close(BankAccountModel bankAccountModel)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
+            var entity = _context.BankAccounts.FirstOrDefault(it => it.Id == bankAccountModel.Id);
 
             if (entity is null)
             {

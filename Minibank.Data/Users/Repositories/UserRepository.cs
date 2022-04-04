@@ -9,11 +9,15 @@ namespace Minibank.Data.Users.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private static List<UserDbModel> _userStorage = new();
+        private readonly MiniBankContext _context;
 
+        public UserRepository(MiniBankContext context)
+        {
+            _context = context;
+        }
         public UserModel GetById(Guid id)
         {
-            var entity = _userStorage.FirstOrDefault(it => it.Id == id);
+            var entity = _context.Users.FirstOrDefault(it => it.Id == id);
 
             if (entity is null)
             {
@@ -30,7 +34,7 @@ namespace Minibank.Data.Users.Repositories
 
         public IEnumerable<UserModel> GetAll()
         {
-            return _userStorage.Select(it => new UserModel()
+            return _context.Users.Select(it => new UserModel()
             {
                 Id = it.Id,
                 Login = it.Login,
@@ -47,13 +51,13 @@ namespace Minibank.Data.Users.Repositories
                 Login = userModel.Login
             };
 
-            _userStorage.Add(entity);
+            _context.Users.Add(entity);
             return entity.Id;
         }
 
         public void Update(UserModel userModel)
         {
-            var entity = _userStorage.FirstOrDefault(it => it.Id == userModel.Id);
+            var entity = _context.Users.FirstOrDefault(it => it.Id == userModel.Id);
 
             if (entity is null)
             {
@@ -66,14 +70,14 @@ namespace Minibank.Data.Users.Repositories
 
         public void Delete(Guid id)
         {
-            var entity = _userStorage.FirstOrDefault(it => it.Id == id);
+            var entity = _context.Users.FirstOrDefault(it => it.Id == id);
 
             if (entity is null)
             {
                 throw new ValidationException($"User with id = {id} doesn't exists");
             }
 
-            _userStorage.Remove(entity);
+            _context.Users.Remove(entity);
         }
     }
 }

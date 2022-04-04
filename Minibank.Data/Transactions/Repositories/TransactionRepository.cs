@@ -9,11 +9,15 @@ namespace Minibank.Data.Transactions.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
-        private static List<TransactionDbModel> _transactionModelStorage = new();
+        private readonly MiniBankContext _context;
 
+        public TransactionRepository(MiniBankContext miniBankContext)
+        {
+            _context = miniBankContext;
+        }
         public TransactionModel GetById(Guid id)
         {
-            var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == id);
+            var entity = _context.Transactions.FirstOrDefault(it => it.Id == id);
 
             if (entity is null)
             {
@@ -32,7 +36,7 @@ namespace Minibank.Data.Transactions.Repositories
 
         public IEnumerable<TransactionModel> GetAll()
         {
-            return _transactionModelStorage.Select(entity => new TransactionModel()
+            return _context.Transactions.Select(entity => new TransactionModel()
             {
                 Id = entity.Id,
                 AmountOfMoney = entity.AmountOfMoney,
@@ -53,14 +57,14 @@ namespace Minibank.Data.Transactions.Repositories
                 ToAccountId = transactionModel.ToAccountId
             };
 
-            _transactionModelStorage.Add(entity);
+            _context.Transactions.Add(entity);
 
             return entity.Id;
         }
 
         public void Update(TransactionModel transactionModel)
         {
-            var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == transactionModel.Id);
+            var entity = _context.Transactions.FirstOrDefault(it => it.Id == transactionModel.Id);
 
             if (entity is null)
             {
@@ -75,11 +79,11 @@ namespace Minibank.Data.Transactions.Repositories
 
         public void Delete(Guid id)
         {
-            var entity = _transactionModelStorage.FirstOrDefault(it => it.Id == id);
+            var entity = _context.Transactions.FirstOrDefault(it => it.Id == id);
 
             if (entity is not null)
             {
-                _transactionModelStorage.Remove(entity);
+                _context.Transactions.Remove(entity);
             }
         }
     }
