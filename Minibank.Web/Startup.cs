@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Minibank.Core;
 using Minibank.Data;
+using Minibank.Web.HostedServices;
 using Minibank.Web.Middlewares;
 
 namespace Minibank.Web
@@ -37,6 +38,9 @@ namespace Minibank.Web
                 //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
+            
+            services.AddHostedService<MigrationHostedService>();
+            
             services
                 .AddData(Configuration)
                 .AddCore();
