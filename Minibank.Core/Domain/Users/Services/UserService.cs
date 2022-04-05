@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
@@ -19,7 +20,7 @@ namespace Minibank.Core.Domain.Users.Services
             _unitOfWork = unitOfWork;
         }
 
-        public UserModel GetById(Guid id)
+        public async Task<UserModel> GetById(Guid id)
         {
             var user = _userRepository.GetById(id);
 
@@ -28,15 +29,15 @@ namespace Minibank.Core.Domain.Users.Services
                 throw new ObjectNotFoundException($"User with id = {id} does not exist");
             }
 
-            return user;
+            return await user;
         }
 
-        public IEnumerable<UserModel> GetAll()
+        public async Task<IEnumerable<UserModel>> GetAll()
         {
-            return _userRepository.GetAll();
+            return await _userRepository.GetAll();
         }
 
-        public Guid Create(UserModel userModel)
+        public async Task<Guid> Create(UserModel userModel)
         {
             if (string.IsNullOrWhiteSpace(userModel.Email))
             {
@@ -50,16 +51,16 @@ namespace Minibank.Core.Domain.Users.Services
 
             var user = _userRepository.Create(userModel);
             _unitOfWork.SaveChanges();
-            return user;
+            return await user;
         }
 
-        public void Update(UserModel userModel)
+        public async Task Update(UserModel userModel)
         {
-            _userRepository.Update(userModel);
+            await _userRepository.Update(userModel);
             _unitOfWork.SaveChanges();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             var user = _userRepository.GetById(id);
 
@@ -68,12 +69,12 @@ namespace Minibank.Core.Domain.Users.Services
                 throw new ObjectNotFoundException($"User with id = {id} doesnt exists");
             }
 
-            if (_bankAccountRepository.Any(id))
+            if (await _bankAccountRepository.Any(id))
             {
                 throw new ValidationException($"User with id = {id} have an active bank accounts");
             }
 
-            _userRepository.Delete(id);
+            await _userRepository.Delete(id);
             _unitOfWork.SaveChanges();
         }
     }

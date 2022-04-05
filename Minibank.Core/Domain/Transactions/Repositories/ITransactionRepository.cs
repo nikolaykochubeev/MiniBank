@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Minibank.Core.Domain.Transactions.Repositories
 {
     public interface ITransactionRepository
     {
-        TransactionModel GetById(Guid id);
-        IEnumerable<TransactionModel> GetAll();
-        Guid Create(TransactionModel transactionModel);
-        void Update(TransactionModel transactionModel);
-        void Delete(Guid id);
+        Task<TransactionModel> GetById(Guid id);
+        Task<IEnumerable<TransactionModel>> GetAll();
+        Task<Guid> Create(TransactionModel transactionModel);
+        Task Update(TransactionModel transactionModel);
+        Task Delete(Guid id);
     }
 }

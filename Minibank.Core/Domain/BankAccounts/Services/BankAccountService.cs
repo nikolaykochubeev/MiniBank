@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Currency.Services;
 using Minibank.Core.Domain.Transactions;
@@ -11,8 +12,8 @@ namespace Minibank.Core.Domain.BankAccounts.Services
 {
     public class BankAccountService : IBankAccountService
     {
-        private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly ICurrencyService _currencyService;
         private readonly IUnitOfWork _unitOfWork;
@@ -28,9 +29,9 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             _unitOfWork = unitOfWork;
         }
 
-        public BankAccountModel GetById(Guid id)
+        public async Task<BankAccountModel> GetById(Guid id)
         {
-            var bankAccount = _bankAccountRepository.GetById(id);
+            var bankAccount = await _bankAccountRepository.GetById(id);
 
             if (bankAccount is null)
             {
@@ -40,17 +41,17 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             return bankAccount;
         }
 
-        public IEnumerable<BankAccountModel> GetAll()
+        public async Task<IEnumerable<BankAccountModel>> GetAll()
         {
-            return _bankAccountRepository.GetAll();
+            return await _bankAccountRepository.GetAll();
         }
 
-        public IEnumerable<TransactionModel> GetAllTransactions()
+        public async Task<IEnumerable<TransactionModel>> GetAllTransactions()
         {
-            return _transactionRepository.GetAll();
+            return await _transactionRepository.GetAll();
         }
 
-        public Guid Create(BankAccountModel bankAccountModel)
+        public async Task<Guid> Create(BankAccountModel bankAccountModel)
         {
             var user = _userRepository.GetById(bankAccountModel.UserId);
             if (user is null)
@@ -64,7 +65,7 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             }
 
             var bankAccountId = Guid.NewGuid();
-            _bankAccountRepository.Create(new BankAccountModel
+            await _bankAccountRepository.Create(new BankAccountModel
             {
                 Id = bankAccountId,
                 UserId = bankAccountModel.UserId,
@@ -79,10 +80,10 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             return bankAccountId;
         }
 
-        public decimal CalculateCommission(TransactionModel transactionModel)
+        public async Task<decimal> CalculateCommission(TransactionModel transactionModel)
         {
-            var fromAccount = _bankAccountRepository.GetById(transactionModel.FromAccountId);
-            var toAccount = _bankAccountRepository.GetById(transactionModel.ToAccountId);
+            var fromAccount = await _bankAccountRepository.GetById(transactionModel.FromAccountId);
+            var toAccount = await _bankAccountRepository.GetById(transactionModel.ToAccountId);
 
             if (fromAccount.Currency != transactionModel.Currency)
             {
@@ -95,10 +96,10 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             return fromAccount.UserId != toAccount.UserId ? transactionMoney * (decimal)0.02 : 0;
         }
 
-        public Guid Transfer(TransactionModel transactionModel)
+        public async Task<Guid> Transfer(TransactionModel transactionModel)
         {
-            var fromAccount = _bankAccountRepository.GetById(transactionModel.FromAccountId);
-            var toAccount = _bankAccountRepository.GetById(transactionModel.ToAccountId);
+            var fromAccount = await _bankAccountRepository.GetById(transactionModel.FromAccountId);
+            var toAccount = await _bankAccountRepository.GetById(transactionModel.ToAccountId);
 
             if (fromAccount is null)
             {
@@ -129,7 +130,7 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             }
 
             var transactionMoney = transactionModel.AmountOfMoney;
-            var commission = CalculateCommission(transactionModel);
+            var commission = await CalculateCommission(transactionModel);
 
             if (fromAccount.AmountOfMoney - transactionMoney - commission < decimal.Zero)
             {
@@ -139,7 +140,7 @@ namespace Minibank.Core.Domain.BankAccounts.Services
 
             fromAccount.AmountOfMoney -= (transactionMoney + commission);
 
-            _bankAccountRepository.UpdateAmount(fromAccount.Id, fromAccount.AmountOfMoney);
+            await _bankAccountRepository.UpdateAmount(fromAccount.Id, fromAccount.AmountOfMoney);
 
             if (toAccount.Currency != fromAccount.Currency)
             {
@@ -149,17 +150,17 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             }
 
             toAccount.AmountOfMoney += transactionMoney;
-            _bankAccountRepository.UpdateAmount(toAccount.Id, toAccount.AmountOfMoney);
+            await _bankAccountRepository.UpdateAmount(toAccount.Id, toAccount.AmountOfMoney);
 
-            var transaction = _transactionRepository.Create(transactionModel);
+            var transaction = await _transactionRepository.Create(transactionModel);
             _unitOfWork.SaveChanges();
 
             return transaction;
         }
 
-        public void Close(Guid id)
+        public async Task Close(Guid id)
         {
-            var bankAccount = _bankAccountRepository.GetById(id);
+            var bankAccount = await _bankAccountRepository.GetById(id);
 
             if (bankAccount is null)
             {
@@ -171,7 +172,7 @@ namespace Minibank.Core.Domain.BankAccounts.Services
                 throw new ValidationException("It is impossible to close an account if there is money left on it");
             }
 
-            _bankAccountRepository.Close(bankAccount);
+            await _bankAccountRepository.Close(bankAccount);
             _unitOfWork.SaveChanges();
         }
     }

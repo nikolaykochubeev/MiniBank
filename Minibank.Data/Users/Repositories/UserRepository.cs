@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Minibank.Core.Domain.Users;
 using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
@@ -15,9 +17,10 @@ namespace Minibank.Data.Users.Repositories
         {
             _context = context;
         }
-        public UserModel GetById(Guid id)
+
+        public async Task<UserModel> GetById(Guid id)
         {
-            var entity = _context.Users.FirstOrDefault(it => it.Id == id);
+            var entity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(it => it.Id == id);
 
             if (entity is null)
             {
@@ -32,9 +35,11 @@ namespace Minibank.Data.Users.Repositories
             };
         }
 
-        public IEnumerable<UserModel> GetAll()
+        public async Task<IEnumerable<UserModel>> GetAll()
         {
-            return _context.Users.Select(it => new UserModel()
+            var users = await _context.Users.AsNoTracking().ToListAsync();
+
+            return users.Select(it => new UserModel()
             {
                 Id = it.Id,
                 Login = it.Login,
@@ -42,7 +47,7 @@ namespace Minibank.Data.Users.Repositories
             });
         }
 
-        public Guid Create(UserModel userModel)
+        public async Task<Guid> Create(UserModel userModel)
         {
             var entity = new UserDbModel
             {
@@ -51,13 +56,13 @@ namespace Minibank.Data.Users.Repositories
                 Login = userModel.Login
             };
 
-            _context.Users.Add(entity);
+            await _context.Users.AddAsync(entity);
             return entity.Id;
         }
 
-        public void Update(UserModel userModel)
+        public async Task Update(UserModel userModel)
         {
-            var entity = _context.Users.FirstOrDefault(it => it.Id == userModel.Id);
+            var entity = await _context.Users.FirstOrDefaultAsync(it => it.Id == userModel.Id);
 
             if (entity is null)
             {
@@ -68,9 +73,9 @@ namespace Minibank.Data.Users.Repositories
             entity.Login = userModel.Login;
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var entity = _context.Users.FirstOrDefault(it => it.Id == id);
+            var entity = await _context.Users.FirstOrDefaultAsync(it => it.Id == id);
 
             if (entity is null)
             {

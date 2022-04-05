@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Minibank.Core.Domain.Transactions;
 using Minibank.Core.Domain.Transactions.Repositories;
 using Minibank.Core.Exceptions;
@@ -15,9 +17,10 @@ namespace Minibank.Data.Transactions.Repositories
         {
             _context = miniBankContext;
         }
-        public TransactionModel GetById(Guid id)
+
+        public async Task<TransactionModel> GetById(Guid id)
         {
-            var entity = _context.Transactions.FirstOrDefault(it => it.Id == id);
+            var entity = await _context.Transactions.FirstOrDefaultAsync(it => it.Id == id);
 
             if (entity is null)
             {
@@ -34,9 +37,11 @@ namespace Minibank.Data.Transactions.Repositories
             };
         }
 
-        public IEnumerable<TransactionModel> GetAll()
+        public async Task<IEnumerable<TransactionModel>> GetAll()
         {
-            return _context.Transactions.Select(entity => new TransactionModel()
+            var transactions = await _context.Transactions.ToListAsync();
+
+            return transactions.Select(entity => new TransactionModel()
             {
                 Id = entity.Id,
                 AmountOfMoney = entity.AmountOfMoney,
@@ -46,7 +51,7 @@ namespace Minibank.Data.Transactions.Repositories
             });
         }
 
-        public Guid Create(TransactionModel transactionModel)
+        public async Task<Guid> Create(TransactionModel transactionModel)
         {
             var entity = new TransactionDbModel()
             {
@@ -56,15 +61,14 @@ namespace Minibank.Data.Transactions.Repositories
                 FromAccountId = transactionModel.FromAccountId,
                 ToAccountId = transactionModel.ToAccountId
             };
-
-            _context.Transactions.Add(entity);
+            await _context.Transactions.AddAsync(entity);
 
             return entity.Id;
         }
 
-        public void Update(TransactionModel transactionModel)
+        public async Task Update(TransactionModel transactionModel)
         {
-            var entity = _context.Transactions.FirstOrDefault(it => it.Id == transactionModel.Id);
+            var entity = await _context.Transactions.FirstOrDefaultAsync(it => it.Id == transactionModel.Id);
 
             if (entity is null)
             {
@@ -77,9 +81,9 @@ namespace Minibank.Data.Transactions.Repositories
             entity.ToAccountId = transactionModel.ToAccountId;
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var entity = _context.Transactions.FirstOrDefault(it => it.Id == id);
+            var entity = await _context.Transactions.FirstOrDefaultAsync(it => it.Id == id);
 
             if (entity is not null)
             {
