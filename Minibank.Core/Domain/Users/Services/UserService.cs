@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentValidation;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
+using ValidationException = Minibank.Core.Exceptions.ValidationException;
 
 namespace Minibank.Core.Domain.Users.Services
 {
@@ -11,12 +13,15 @@ namespace Minibank.Core.Domain.Users.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IValidator<UserModel> _userValidator;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository, IBankAccountRepository bankAccountRepository)
+        public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository,
+            IBankAccountRepository bankAccountRepository, IValidator<UserModel> userValidator)
         {
             _userRepository = userRepository;
             _bankAccountRepository = bankAccountRepository;
+            _userValidator = userValidator;
             _unitOfWork = unitOfWork;
         }
 
@@ -39,15 +44,7 @@ namespace Minibank.Core.Domain.Users.Services
 
         public async Task<Guid> Create(UserModel userModel)
         {
-            if (string.IsNullOrWhiteSpace(userModel.Email))
-            {
-                throw new ValidationException("Email can not be the empty string.");
-            }
-
-            if (string.IsNullOrWhiteSpace(userModel.Login))
-            {
-                throw new ValidationException("Login can not be the empty string.");
-            }
+            await _userValidator.ValidateAndThrowAsync(userModel);
 
             var user = _userRepository.Create(userModel);
             _unitOfWork.SaveChanges();
