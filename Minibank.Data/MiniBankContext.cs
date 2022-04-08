@@ -24,6 +24,7 @@ namespace Minibank.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.LogTo(Console.WriteLine);
             base.OnConfiguring(optionsBuilder);
