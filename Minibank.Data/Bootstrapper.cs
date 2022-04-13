@@ -30,8 +30,7 @@ namespace Minibank.Data
 
             services.AddDbContext<MiniBankContext>(options => options
                 .UseLazyLoadingProxies()
-                .UseNpgsql(
-                    "Host=localhost;Port=5432;Database=minibank;Username=postgres;Password=20010918"));
+                .UseNpgsql(configuration["PostgresConnectionString"]));
             return services;
         }
     }

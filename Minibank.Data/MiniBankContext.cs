@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Minibank.Data.BankAccounts;
 using Minibank.Data.Transactions;
 using Minibank.Data.Users;
@@ -12,8 +13,10 @@ namespace Minibank.Data
         public DbSet<UserDbModel> Users { get; set; }
         public DbSet<BankAccountDbModel> BankAccounts { get; set; }
         public DbSet<TransactionDbModel> Transactions { get; set; }
-        public MiniBankContext(DbContextOptions options) : base(options)
+        public string ConnectionString { get; }
+        public MiniBankContext(DbContextOptions options, IConfiguration configuration) : base(options)
         {
+            ConnectionString = configuration["PostgresConnectionString"];
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,22 +27,11 @@ namespace Minibank.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseNpgsql(ConnectionString);
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.LogTo(Console.WriteLine);
             base.OnConfiguring(optionsBuilder);
-        }
-    }
-
-    public class Factory : IDesignTimeDbContextFactory<MiniBankContext>
-    {
-        public MiniBankContext CreateDbContext(string[] args)
-        {
-            var options = new DbContextOptionsBuilder()
-                .UseNpgsql("Host=localhost;Port=5432;Database=minibank;Username=postgres;Password=20010918")
-                .Options;
-
-            return new MiniBankContext(options);
         }
     }
 }
