@@ -15,12 +15,4 @@ namespace Minibank.Data.BankAccounts
         public DateTime OpeningDate { get; set; }
         public DateTime ClosingDate { get; set; }
     }
-
-    internal class Map : IEntityTypeConfiguration<BankAccountDbModel>
-    {
-        public void Configure(EntityTypeBuilder<BankAccountDbModel> builder)
-        {
-            builder.ToTable("bankAccount");
-        }
-    }
 }

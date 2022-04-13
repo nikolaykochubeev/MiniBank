@@ -9,13 +9,5 @@ namespace Minibank.Data.Users
         public Guid Id { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
-
-        internal class Map : IEntityTypeConfiguration<UserDbModel>
-        {
-            public void Configure(EntityTypeBuilder<UserDbModel> builder)
-            {
-                builder.ToTable("user");
-            }
-        }
     }
 }

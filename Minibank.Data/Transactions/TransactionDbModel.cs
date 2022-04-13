@@ -12,13 +12,5 @@ namespace Minibank.Data.Transactions
         public Guid ToAccountId { get; set; }
         public decimal AmountOfMoney { get; set; }
         public CurrencyModel Currency { get; set; }
-
-        internal class Map : IEntityTypeConfiguration<TransactionDbModel>
-        {
-            public void Configure(EntityTypeBuilder<TransactionDbModel> builder)
-            {
-                builder.ToTable("transaction");
-            }
-        }
     }
 }
