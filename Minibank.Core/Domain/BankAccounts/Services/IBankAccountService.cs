@@ -7,12 +7,12 @@ namespace Minibank.Core.Domain.BankAccounts.Services
 {
     public interface IBankAccountService
     {
-        Task<BankAccountModel> GetById(Guid id);
-        Task<IEnumerable<BankAccountModel>> GetAll();
-        Task<IEnumerable<TransactionModel>> GetAllTransactions();
-        Task<Guid> Create(BankAccountModel bankAccountModel);
-        Task<decimal> CalculateCommission(TransactionModel transactionModel);
-        Task<Guid> Transfer(TransactionModel transactionModel);
-        Task Close(Guid id);
+        Task<BankAccountModel> GetByIdAsync(Guid id);
+        Task<IEnumerable<BankAccountModel>> GetAllAsync();
+        Task<IEnumerable<TransactionModel>> GetAllTransactionsAsync();
+        Task<Guid> CreateAsync(BankAccountModel bankAccountModel);
+        Task<decimal> CalculateCommissionAsync(TransactionModel transactionModel);
+        Task<Guid> TransferAsync(TransactionModel transactionModel);
+        Task CloseAsync(Guid id);
     }
 }

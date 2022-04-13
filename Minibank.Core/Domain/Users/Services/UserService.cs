@@ -25,7 +25,7 @@ namespace Minibank.Core.Domain.Users.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<UserModel> GetById(Guid id)
+        public async Task<UserModel> GetByIdAsync(Guid id)
         {
             var user = _userRepository.GetById(id);
 
@@ -37,27 +37,27 @@ namespace Minibank.Core.Domain.Users.Services
             return await user;
         }
 
-        public async Task<IEnumerable<UserModel>> GetAll()
+        public async Task<IEnumerable<UserModel>> GetAllAsync()
         {
             return await _userRepository.GetAll();
         }
 
-        public async Task<Guid> Create(UserModel userModel)
+        public async Task<Guid> CreateAsync(UserModel userModel)
         {
             await _userValidator.ValidateAndThrowAsync(userModel);
 
             var user = _userRepository.Create(userModel);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChanges();
             return await user;
         }
 
-        public async Task Update(UserModel userModel)
+        public async Task UpdateAsync(UserModel userModel)
         {
             await _userRepository.Update(userModel);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var user = _userRepository.GetById(id);
 
@@ -72,7 +72,7 @@ namespace Minibank.Core.Domain.Users.Services
             }
 
             await _userRepository.Delete(id);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChanges();
         }
     }
 }

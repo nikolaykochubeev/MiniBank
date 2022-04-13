@@ -24,25 +24,25 @@ namespace Minibank.Web.Controllers.BankAccounts
         [HttpGet("{id}")]
         public async Task<BankAccountModel> GetById(Guid id)
         {
-            return await _bankAccountService.GetById(id);
+            return await _bankAccountService.GetByIdAsync(id);
         }
 
         [HttpGet]
         public async Task<IEnumerable<BankAccountModel>> GetAll()
         {
-            return await _bankAccountService.GetAll();
+            return await _bankAccountService.GetAllAsync();
         }
 
         [HttpGet]
         public async Task<IEnumerable<TransactionModel>> GetAllTransactions()
         {
-            return await _bankAccountService.GetAllTransactions();
+            return await _bankAccountService.GetAllTransactionsAsync();
         }
 
         [HttpGet]
         public async Task<decimal> GetTransferCommission(TransactionDto transactionModel)
         {
-            return await _bankAccountService.CalculateCommission(new TransactionModel
+            return await _bankAccountService.CalculateCommissionAsync(new TransactionModel
             {
                 Currency = transactionModel.Currency,
                 AmountOfMoney = transactionModel.AmountOfMoney,
@@ -54,7 +54,7 @@ namespace Minibank.Web.Controllers.BankAccounts
         [HttpPost]
         public async Task<Guid> Create(BankAccountDto bankAccountDto)
         {
-            return await _bankAccountService.Create(new BankAccountModel()
+            return await _bankAccountService.CreateAsync(new BankAccountModel()
             {
                 UserId = bankAccountDto.UserId,
                 Currency = bankAccountDto.Currency,
@@ -66,7 +66,7 @@ namespace Minibank.Web.Controllers.BankAccounts
         [HttpPost]
         public async Task<Guid> CreateTransfer(TransactionDto transactionModel)
         {
-            return await _bankAccountService.Transfer(new TransactionModel
+            return await _bankAccountService.TransferAsync(new TransactionModel
             {
                 Currency = transactionModel.Currency,
                 AmountOfMoney = transactionModel.AmountOfMoney,
@@ -78,7 +78,7 @@ namespace Minibank.Web.Controllers.BankAccounts
         [HttpPost("{id}")]
         public async Task CloseById(Guid id)
         {
-            await _bankAccountService.Close(id);
+            await _bankAccountService.CloseAsync(id);
         }
     }
 }
