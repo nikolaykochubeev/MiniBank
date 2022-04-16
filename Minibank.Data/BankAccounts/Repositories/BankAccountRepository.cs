@@ -55,20 +55,21 @@ namespace Minibank.Data.BankAccounts.Repositories
             });
         }
 
-        public async Task Create(BankAccountModel bankAccountModel)
+        public async Task<Guid> Create(BankAccountModel bankAccountModel)
         {
             var entity = new BankAccountDbModel()
             {
-                Id = bankAccountModel.Id,
+                Id = Guid.NewGuid(),
                 UserId = bankAccountModel.UserId,
                 AmountOfMoney = bankAccountModel.AmountOfMoney,
                 Currency = bankAccountModel.Currency,
-                IsActive = bankAccountModel.IsActive,
-                OpeningDate = bankAccountModel.OpeningDate,
-                ClosingDate = bankAccountModel.ClosingDate
+                IsActive = true,
+                OpeningDate = DateTime.Now,
+                ClosingDate = DateTime.Now.AddYears(4),
             };
 
             await _context.BankAccounts.AddAsync(entity);
+            return entity.Id;
         }
 
         public async Task Update(BankAccountModel bankAccountModel)
@@ -104,13 +105,13 @@ namespace Minibank.Data.BankAccounts.Repositories
             return await _context.BankAccounts.AnyAsync(model => model.UserId == id);
         }
 
-        public async Task Close(BankAccountModel bankAccountModel)
+        public async Task Close(Guid id)
         {
-            var entity = await _context.BankAccounts.FirstOrDefaultAsync(it => it.Id == bankAccountModel.Id);
+            var entity = await _context.BankAccounts.FirstOrDefaultAsync(it => it.Id == id);
 
             if (entity is null)
             {
-                throw new ValidationException($"BankAccount with id = {bankAccountModel.Id} doesn't exists");
+                throw new ValidationException($"BankAccount with id = {id} doesn't exists");
             }
 
             entity.ClosingDate = DateTime.Now;
