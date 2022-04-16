@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minibank.Data", "Minibank.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minibank.Web", "Minibank.Web\Minibank.Web.csproj", "{867DFA80-08F8-4DC6-9F8F-F8AA25461F4A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D18E3DA8-D436-49C8-A918-E41D6578153F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minibank.Core.Tests", "Minibank.Core.Tests\Minibank.Core.Tests.csproj", "{04BE38FB-01A5-4F28-9620-FBE4CF9EEBFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +27,12 @@ Global
 		{867DFA80-08F8-4DC6-9F8F-F8AA25461F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{867DFA80-08F8-4DC6-9F8F-F8AA25461F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{867DFA80-08F8-4DC6-9F8F-F8AA25461F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04BE38FB-01A5-4F28-9620-FBE4CF9EEBFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04BE38FB-01A5-4F28-9620-FBE4CF9EEBFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04BE38FB-01A5-4F28-9620-FBE4CF9EEBFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04BE38FB-01A5-4F28-9620-FBE4CF9EEBFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04BE38FB-01A5-4F28-9620-FBE4CF9EEBFF} = {D18E3DA8-D436-49C8-A918-E41D6578153F}
 	EndGlobalSection
 EndGlobal
