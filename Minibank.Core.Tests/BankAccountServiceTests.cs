@@ -144,12 +144,80 @@ public class BankAccountServiceTests
 
         _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid).Result).Returns(bankAccount);
         _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid2).Result).Returns(bankAccount2);
-        var exception = Assert.ThrowsAsync<Minibank.Core.Exceptions.ValidationException>(() => _bankAccountService.TransferAsync(transaction));
+        var exception =
+            Assert.ThrowsAsync<Minibank.Core.Exceptions.ValidationException>(() =>
+                _bankAccountService.TransferAsync(transaction));
 
         Assert.Contains(
             "The final currencies of the transaction and the accounts to which the money is received do not match",
             exception.Result.Message);
     }
+
+    [Fact]
+    public void CalculateCommission_Success_ShouldCalculateCorrectCommission()
+    {
+        var bankAccountGuid = Guid.NewGuid();
+        var bankAccountGuid2 = Guid.NewGuid();
+        var transactionId = Guid.NewGuid();
+
+        var fromAccount = new BankAccountModel()
+        {
+            Id = bankAccountGuid, UserId = Guid.NewGuid(), AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            IsActive = true
+        };
+        var toAccount = new BankAccountModel()
+        {
+            Id = bankAccountGuid2, UserId = Guid.NewGuid(), AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            IsActive = true
+        };
+        var transaction = new TransactionModel()
+        {
+            AmountOfMoney = 5, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
+            ToAccountId = bankAccountGuid2, Id = transactionId
+        };
+        var correctCommission = transaction.AmountOfMoney * (decimal)0.02;
+
+        _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid).Result).Returns(fromAccount);
+        _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid2).Result).Returns(toAccount);
+
+        var commissionFromService = _bankAccountService.CalculateCommissionAsync(transaction);
+
+        Assert.Equal(correctCommission, commissionFromService.Result);
+    }
+
+    [Fact]
+    public void CalculateCommission_WithOneUserTwoAccounts_ShouldCalculateCorrectCommission()
+    {
+        var bankAccountGuid = Guid.NewGuid();
+        var bankAccountGuid2 = Guid.NewGuid();
+        var transactionId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+
+        var fromAccount = new BankAccountModel()
+        {
+            Id = bankAccountGuid, UserId = userId, AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            IsActive = true
+        };
+        var toAccount = new BankAccountModel()
+        {
+            Id = bankAccountGuid2, UserId = userId, AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            IsActive = true
+        };
+        var transaction = new TransactionModel()
+        {
+            AmountOfMoney = 5, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
+            ToAccountId = bankAccountGuid2, Id = transactionId
+        };
+        const int correctCommission = 0;
+
+        _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid).Result).Returns(fromAccount);
+        _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid2).Result).Returns(toAccount);
+
+        var commissionFromService = _bankAccountService.CalculateCommissionAsync(transaction);
+
+        Assert.Equal(correctCommission, commissionFromService.Result);
+    }
+
 
     [Fact]
     public void Transfer_Success_ShouldCreateTransaction()
@@ -173,12 +241,12 @@ public class BankAccountServiceTests
             AmountOfMoney = 5, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
             ToAccountId = bankAccountGuid2, Id = transactionId
         };
-        
+
         _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid).Result).Returns(fromAccount);
         _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid2).Result).Returns(toAccount);
         _fakeTransactionRepository.Setup(repo => repo.Create(transaction).Result).Returns(transactionId);
         var transactionIdFromService = _bankAccountService.TransferAsync(transaction);
-        
+
         Assert.Equal(transactionId, transactionIdFromService.Result);
     }
 
