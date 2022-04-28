@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -18,6 +19,14 @@ namespace Minibank.Web.Middlewares
             try
             {
                 await next(httpContext);
+            }
+            catch (FluentValidation.ValidationException exception)
+            {
+                var errors = exception.Errors
+                    .Select(x => $"{x.PropertyName}: {x.ErrorMessage}");
+                var errorMessage = string.Join(Environment.NewLine, errors);
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await httpContext.Response.WriteAsJsonAsync(new { Error = errorMessage });
             }
             catch (Exception exception)
             {

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Minibank.Core.Domain.BankAccounts.Repositories
 {
     public interface IBankAccountRepository
     {
-        BankAccountModel GetById(Guid id);
-        IEnumerable<BankAccountModel> GetAll();
-        void Create(BankAccountModel bankAccountModel);
-        void Update(BankAccountModel bankAccountModel);
-        void Close(BankAccountModel bankAccountModel);
-        void UpdateAmount(Guid id, decimal amount);
-        bool Any(Guid id);
+        Task<BankAccountModel> GetById(Guid id);
+        Task<IEnumerable<BankAccountModel>> GetAll();
+        Task Create(BankAccountModel bankAccountModel);
+        Task Update(BankAccountModel bankAccountModel);
+        Task Close(BankAccountModel bankAccountModel);
+        Task UpdateAmount(Guid id, decimal amount);
+        Task<bool> Any(Guid id);
     }
 }

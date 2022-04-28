@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Minibank.Core;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Currency.Services;
 using Minibank.Core.Domain.Transactions.Repositories;
@@ -20,9 +22,15 @@ namespace Minibank.Data
             {
                 options.BaseAddress = new Uri(configuration["CbrDaily"]);
             });
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBankAccountRepository, BankAccountRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+
+            services.AddDbContext<MiniBankContext>(options => options
+                .UseLazyLoadingProxies()
+                .UseNpgsql(configuration["PostgresConnectionString"]));
             return services;
         }
     }

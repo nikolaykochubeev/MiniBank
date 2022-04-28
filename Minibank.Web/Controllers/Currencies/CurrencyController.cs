@@ -18,13 +18,13 @@ namespace Minibank.Web.Controllers.Currencies
         [HttpGet]
         public async Task<decimal> Convert(int amount, string fromCurrency, string toCurrency)
         {
-            return await _currencyService.Convert(amount, fromCurrency, toCurrency);
+            return await _currencyService.ConvertAsync(amount, fromCurrency, toCurrency);
         }
         
         [HttpGet]
         public async Task<decimal> GetRubleCourse(string currencyCode)
         {
-            return await _currencyService.GetRubleCourse(currencyCode);
+            return await _currencyService.GetRubleCourseAsync(currencyCode);
         }
     }
 }

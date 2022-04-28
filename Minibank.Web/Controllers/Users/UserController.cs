@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Domain.Users;
 using Minibank.Core.Domain.Users.Services;
@@ -20,9 +21,9 @@ namespace Minibank.Web.Controllers.Users
         }
 
         [HttpGet("{id}")]
-        public UserModel GetById(Guid id)
+        public async Task<UserModel> GetById(Guid id)
         {
-            var model = _userService.GetById(id);
+            var model = await _userService.GetByIdAsync(id);
 
             return new UserModel
             {
@@ -31,45 +32,45 @@ namespace Minibank.Web.Controllers.Users
                 Email = model.Email,
             };
         }
-        
+
         [HttpGet]
-        public IEnumerable<UserModel> GetAll()
+        public async Task<IEnumerable<UserModel>> GetAll()
         {
-            return _userService.GetAll()
-                .Select(model => new UserModel
-                {
-                    Id = model.Id,
-                    Login = model.Login,
-                    Email = model.Email,
-                });
+            var users = await _userService.GetAllAsync();
+
+            return users.Select(model => new UserModel
+            {
+                Id = model.Id,
+                Login = model.Login,
+                Email = model.Email,
+            });
         }
-        
+
         [HttpPost]
-        public Guid Create(UserDto model)
+        public async Task<Guid> Create(UserDto model)
         {
-            return _userService.Create(new UserModel
+            return await _userService.CreateAsync(new UserModel
             {
                 Login = model.Login,
                 Email = model.Email
             });
-            
         }
-        
+
         [HttpPut("{id}")]
-        public void Update(Guid id, UserDto model)
+        public async Task Update(Guid id, UserDto model)
         {
-            _userService.Update(new UserModel
+            await _userService.UpdateAsync(new UserModel
             {
                 Id = id,
                 Login = model.Login,
                 Email = model.Email
             });
         }
-        
+
         [HttpDelete("{id}")]
-        public void DeleteById(Guid id)
+        public async Task DeleteById(Guid id)
         {
-            _userService.Delete(id);
+            await _userService.DeleteAsync(id);
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using FluentValidation;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Users.Repositories;
 using Minibank.Core.Exceptions;
+using ValidationException = Minibank.Core.Exceptions.ValidationException;
 
 namespace Minibank.Core.Domain.Users.Services
 {
@@ -10,14 +13,19 @@ namespace Minibank.Core.Domain.Users.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IValidator<UserModel> _userValidator;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUserRepository userRepository, IBankAccountRepository bankAccountRepository)
+        public UserService(IUnitOfWork unitOfWork, IUserRepository userRepository,
+            IBankAccountRepository bankAccountRepository, IValidator<UserModel> userValidator)
         {
             _userRepository = userRepository;
             _bankAccountRepository = bankAccountRepository;
+            _userValidator = userValidator;
+            _unitOfWork = unitOfWork;
         }
 
-        public UserModel GetById(Guid id)
+        public async Task<UserModel> GetByIdAsync(Guid id)
         {
             var user = _userRepository.GetById(id);
 
@@ -26,35 +34,30 @@ namespace Minibank.Core.Domain.Users.Services
                 throw new ObjectNotFoundException($"User with id = {id} does not exist");
             }
 
-            return user;
+            return await user;
         }
 
-        public IEnumerable<UserModel> GetAll()
+        public async Task<IEnumerable<UserModel>> GetAllAsync()
         {
-            return _userRepository.GetAll();
+            return await _userRepository.GetAll();
         }
 
-        public Guid Create(UserModel userModel)
+        public async Task<Guid> CreateAsync(UserModel userModel)
         {
-            if (string.IsNullOrWhiteSpace(userModel.Email))
-            {
-                throw new ValidationException("Email can not be the empty string.");
-            }
+            await _userValidator.ValidateAndThrowAsync(userModel);
 
-            if (string.IsNullOrWhiteSpace(userModel.Login))
-            {
-                throw new ValidationException("Login can not be the empty string.");
-            }
-
-            return _userRepository.Create(userModel);
+            var user = _userRepository.Create(userModel);
+            await _unitOfWork.SaveChanges();
+            return await user;
         }
 
-        public void Update(UserModel userModel)
+        public async Task UpdateAsync(UserModel userModel)
         {
-            _userRepository.Update(userModel);
+            await _userRepository.Update(userModel);
+            await _unitOfWork.SaveChanges();
         }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var user = _userRepository.GetById(id);
 
@@ -63,12 +66,13 @@ namespace Minibank.Core.Domain.Users.Services
                 throw new ObjectNotFoundException($"User with id = {id} doesnt exists");
             }
 
-            if (_bankAccountRepository.Any(id))
+            if (await _bankAccountRepository.Any(id))
             {
                 throw new ValidationException($"User with id = {id} have an active bank accounts");
             }
 
-            _userRepository.Delete(id);
+            await _userRepository.Delete(id);
+            await _unitOfWork.SaveChanges();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Minibank.Core.Domain.Currency;
 
 namespace Minibank.Data.BankAccounts

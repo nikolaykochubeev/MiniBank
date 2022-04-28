@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Minibank.Core.Domain.BankAccounts;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Exceptions;
@@ -9,11 +11,16 @@ namespace Minibank.Data.BankAccounts.Repositories
 {
     public class BankAccountRepository : IBankAccountRepository
     {
-        private static List<BankAccountDbModel> _bankAccountStorage = new();
+        private readonly MiniBankContext _context;
 
-        public BankAccountModel GetById(Guid id)
+        public BankAccountRepository(MiniBankContext context)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
+            _context = context;
+        }
+
+        public async Task<BankAccountModel> GetById(Guid id)
+        {
+            var entity = await _context.BankAccounts.FirstOrDefaultAsync(it => it.Id == id);
 
             if (entity is null)
             {
@@ -32,9 +39,11 @@ namespace Minibank.Data.BankAccounts.Repositories
             };
         }
 
-        public IEnumerable<BankAccountModel> GetAll()
+        public async Task<IEnumerable<BankAccountModel>> GetAll()
         {
-            return _bankAccountStorage.Select(entity => new BankAccountModel()
+            var bankAccounts = await _context.BankAccounts.ToListAsync();
+
+            return bankAccounts.Select(entity => new BankAccountModel()
             {
                 Id = entity.Id,
                 UserId = entity.UserId,
@@ -46,7 +55,7 @@ namespace Minibank.Data.BankAccounts.Repositories
             });
         }
 
-        public void Create(BankAccountModel bankAccountModel)
+        public async Task Create(BankAccountModel bankAccountModel)
         {
             var entity = new BankAccountDbModel()
             {
@@ -59,12 +68,12 @@ namespace Minibank.Data.BankAccounts.Repositories
                 ClosingDate = bankAccountModel.ClosingDate
             };
 
-            _bankAccountStorage.Add(entity);
+            await _context.BankAccounts.AddAsync(entity);
         }
 
-        public void Update(BankAccountModel bankAccountModel)
+        public async Task Update(BankAccountModel bankAccountModel)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
+            var entity = await _context.BankAccounts.FirstOrDefaultAsync(it => it.Id == bankAccountModel.Id);
 
             if (entity is null)
             {
@@ -79,9 +88,9 @@ namespace Minibank.Data.BankAccounts.Repositories
             entity.IsActive = bankAccountModel.IsActive;
         }
 
-        public void UpdateAmount(Guid id, decimal amount)
+        public async Task UpdateAmount(Guid id, decimal amount)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == id);
+            var entity = await _context.BankAccounts.FirstOrDefaultAsync(it => it.Id == id);
             if (entity == null)
             {
                 throw new ObjectNotFoundException($"BankAccount id = {id} does not exists");
@@ -90,14 +99,14 @@ namespace Minibank.Data.BankAccounts.Repositories
             entity.AmountOfMoney = amount;
         }
 
-        public bool Any(Guid id)
+        public async Task<bool> Any(Guid id)
         {
-            return _bankAccountStorage.Any(model => model.UserId == id);
+            return await _context.BankAccounts.AnyAsync(model => model.UserId == id);
         }
 
-        public void Close(BankAccountModel bankAccountModel)
+        public async Task Close(BankAccountModel bankAccountModel)
         {
-            var entity = _bankAccountStorage.FirstOrDefault(it => it.Id == bankAccountModel.Id);
+            var entity = await _context.BankAccounts.FirstOrDefaultAsync(it => it.Id == bankAccountModel.Id);
 
             if (entity is null)
             {
