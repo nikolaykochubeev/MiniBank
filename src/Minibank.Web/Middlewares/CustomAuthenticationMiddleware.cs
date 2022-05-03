@@ -30,7 +30,7 @@ namespace Minibank.Web.Middlewares
 
                 var exp = int.Parse(payloadDictionary!["exp"].ToString()!);
 
-                if (exp > DateTimeOffset.Now.ToUnixTimeSeconds())
+                if (exp < DateTimeOffset.Now.ToUnixTimeSeconds())
                 {
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     await httpContext.Response.WriteAsJsonAsync(new { Message = "Token expired" });
