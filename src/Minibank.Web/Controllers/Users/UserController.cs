@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Domain.Users;
 using Minibank.Core.Domain.Users.Services;
@@ -10,6 +11,7 @@ using Minibank.Web.Controllers.Users.Dto;
 namespace Minibank.Web.Controllers.Users
 {
     [ApiController]
+    [Authorize]
     [Route("api/v1/minibank/[controller]/[action]")]
     public class UserController
     {

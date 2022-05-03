@@ -1,0 +1,38 @@
+﻿version: '3.9'
+
+networks:
+  default:
+    external: false
+    name: minibank-network
+
+services:
+  storage:
+    container_name: minibank_storage
+    image: postgres:12
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: minibank
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - ~/volumes/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d minibank -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  app:
+    container_name: minibank_app
+    build:
+      context: .
+      dockerfile: ./build/Minibank.Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - PostgresConnectionString=Host=storage;Port=5432;Database=minibank;Username=postgres;Password=123456
+      - BUILD_CONFIGURATION=Debug
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - ASPNETCORE_URLS=http://+:5001
