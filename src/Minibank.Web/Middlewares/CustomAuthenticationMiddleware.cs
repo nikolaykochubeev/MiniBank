@@ -22,7 +22,7 @@ namespace Minibank.Web.Middlewares
         {
             var token = httpContext.Request.Headers["Authorization"].ToString();
 
-            if (token != "")
+            if (string.IsNullOrEmpty(token))
             {
                 var payloadDictionary =
                     JsonSerializer.Deserialize<Dictionary<string, object>>(
