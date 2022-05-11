@@ -1,4 +1,5 @@
 using System;
+using Minibank.Core;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Users;
 using Minibank.Core.Domain.Users.Repositories;
@@ -9,7 +10,7 @@ using Moq;
 using Xunit;
 using ValidationException = FluentValidation.ValidationException;
 
-namespace Minibank.Core.Tests;
+namespace Tests;
 
 public class UserServiceTests
 {
