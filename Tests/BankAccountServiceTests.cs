@@ -55,6 +55,7 @@ public class BankAccountServiceTests
         _fakeBankAccountRepository.Setup(repo => repo.Create(bankAccount).Result).Returns(bankAccountGuid);
 
         Assert.Equal(bankAccountGuid, _bankAccountService.CreateAsync(bankAccount).Result);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Once);
     }
 
     [Fact]
@@ -76,6 +77,7 @@ public class BankAccountServiceTests
 
         Assert.Contains("Unable to create an account, the amount of money cannot be negative",
             exception.Result.Message);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
 
     [Fact]
@@ -95,6 +97,7 @@ public class BankAccountServiceTests
                 .CreateAsync(bankAccount));
 
         Assert.Contains($"User with id = {userGuid} does not exist", exception.Result.Message);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
 
     [Fact]
@@ -111,6 +114,7 @@ public class BankAccountServiceTests
         var returnedBankAccount = _bankAccountService.GetByIdAsync(bankAccountGuid);
 
         Assert.Equal(returnedBankAccount.Result, bankAccount);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
 
     [Fact]
@@ -246,9 +250,43 @@ public class BankAccountServiceTests
         _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid2).Result).Returns(toAccount);
         _fakeTransactionRepository.Setup(repo => repo.Create(transaction).Result).Returns(transactionId);
         var transactionIdFromService = _bankAccountService.TransferAsync(transaction);
+        Assert.Equal((decimal) 4.9, _bankAccountService.GetByIdAsync(bankAccountGuid).Result.AmountOfMoney);
+        Assert.Equal(15, _bankAccountService.GetByIdAsync(bankAccountGuid2).Result.AmountOfMoney);
+        Assert.Equal(transactionId, transactionIdFromService.Result);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Once);
+    }
+
+    [Fact]
+    public void Transfer_WithNullBalanceAfterTransfer_ShouldCreateTransaction()
+    {
+        var bankAccountGuid = Guid.NewGuid();
+        var bankAccountGuid2 = Guid.NewGuid();
+        var transactionId = Guid.NewGuid();
+
+        var fromAccount = new BankAccountModel()
+        {
+            Id = bankAccountGuid, UserId = Guid.NewGuid(), AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            IsActive = true
+        };
+        var toAccount = new BankAccountModel()
+        {
+            Id = bankAccountGuid2, UserId = Guid.NewGuid(), AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            IsActive = true
+        };
+        var transaction = new TransactionModel()
+        {
+            AmountOfMoney = (decimal) 9.8, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
+            ToAccountId = bankAccountGuid2, Id = transactionId
+        };
+        
+        _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid).Result).Returns(fromAccount);
+        _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid2).Result).Returns(toAccount);
+        _fakeTransactionRepository.Setup(repo => repo.Create(transaction).Result).Returns(transactionId);
+        var transactionIdFromService = _bankAccountService.TransferAsync(transaction);
 
         Assert.Equal(transactionId, transactionIdFromService.Result);
     }
+    
 
     [Fact]
     public void CloseBankAccount_Success_CloseCalled()
@@ -263,5 +301,6 @@ public class BankAccountServiceTests
         _fakeBankAccountRepository.Setup(repo => repo.GetById(bankAccountGuid).Result).Returns(bankAccount);
         _bankAccountService.CloseAsync(bankAccountGuid);
         _fakeBankAccountRepository.Verify(repo => repo.Close(bankAccountGuid), Times.Once);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Once);
     }
 }
