@@ -1,4 +1,5 @@
 using System;
+using Minibank.Core;
 using Minibank.Core.Domain.BankAccounts;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.BankAccounts.Services;
@@ -13,7 +14,7 @@ using Minibank.Core.Exceptions;
 using Moq;
 using Xunit;
 
-namespace Minibank.Core.Tests;
+namespace Tests;
 
 public class BankAccountServiceTests
 {
@@ -265,17 +266,17 @@ public class BankAccountServiceTests
 
         var fromAccount = new BankAccountModel()
         {
-            Id = bankAccountGuid, UserId = Guid.NewGuid(), AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            Id = bankAccountGuid, UserId = Guid.NewGuid(), AmountOfMoney = 0, Currency = CurrencyModel.USD,
             IsActive = true
         };
         var toAccount = new BankAccountModel()
         {
-            Id = bankAccountGuid2, UserId = Guid.NewGuid(), AmountOfMoney = 10, Currency = CurrencyModel.USD,
+            Id = bankAccountGuid2, UserId = Guid.NewGuid(), AmountOfMoney = 0, Currency = CurrencyModel.USD,
             IsActive = true
         };
         var transaction = new TransactionModel()
         {
-            AmountOfMoney = (decimal) 9.8, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
+            AmountOfMoney = (decimal) 0, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
             ToAccountId = bankAccountGuid2, Id = transactionId
         };
         
