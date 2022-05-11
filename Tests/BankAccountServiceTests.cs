@@ -276,7 +276,7 @@ public class BankAccountServiceTests
         };
         var transaction = new TransactionModel()
         {
-            AmountOfMoney = (decimal) 0, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
+            AmountOfMoney = 0, Currency = CurrencyModel.USD, FromAccountId = bankAccountGuid,
             ToAccountId = bankAccountGuid2, Id = transactionId
         };
         
