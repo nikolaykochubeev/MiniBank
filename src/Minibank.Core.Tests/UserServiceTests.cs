@@ -10,7 +10,7 @@ using Moq;
 using Xunit;
 using ValidationException = FluentValidation.ValidationException;
 
-namespace Tests;
+namespace Minibank.Core.Tests;
 
 public class UserServiceTests
 {

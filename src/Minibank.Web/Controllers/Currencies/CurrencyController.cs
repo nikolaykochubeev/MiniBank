@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minibank.Core.Domain.Currency.Services;
 
 namespace Minibank.Web.Controllers.Currencies
 {
     [ApiController]
+    [Authorize]
     [Route("api/v1/minibank/[controller]/[action]")]
     public class CurrencyController : ControllerBase
     {
