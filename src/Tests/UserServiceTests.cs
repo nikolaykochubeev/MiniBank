@@ -1,4 +1,5 @@
 using System;
+using Minibank.Core;
 using Minibank.Core.Domain.BankAccounts.Repositories;
 using Minibank.Core.Domain.Users;
 using Minibank.Core.Domain.Users.Repositories;
@@ -9,7 +10,7 @@ using Moq;
 using Xunit;
 using ValidationException = FluentValidation.ValidationException;
 
-namespace Minibank.Core.Tests;
+namespace Tests;
 
 public class UserServiceTests
 {
@@ -31,7 +32,7 @@ public class UserServiceTests
     }
 
     [Fact]
-    public void AddUser_WithEmptyLoginOrEmail_ShouldThrowException()
+    public void CreateUser_WithEmptyLoginOrEmail_ShouldThrowException()
     {
         var userWithEmptyLogin = new UserModel { Id = Guid.NewGuid(), Email = "email@mail.ru", Login = "" };
         var userWithEmptyEmail = new UserModel { Id = Guid.NewGuid(), Email = "", Login = "Login" };
@@ -43,6 +44,7 @@ public class UserServiceTests
 
         Assert.Contains("Login cannot be empty", loginException.Result.Message);
         Assert.Contains("Email cannot be empty", emailException.Result.Message);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
 
     [Fact]
@@ -54,6 +56,7 @@ public class UserServiceTests
         _fakeUserRepository.Setup(repo => repo.Create(user).Result).Returns(guid);
 
         Assert.Equal(_userService.CreateAsync(user).Result, guid);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Once);
     }
 
     [Fact]
@@ -66,6 +69,7 @@ public class UserServiceTests
         _fakeUserRepository.Setup(repo => repo.GetById(guid).Result).Returns(user);
         var returnedUser = _userService.GetByIdAsync(guid).Result;
 
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
         Assert.Equal(returnedUser, user);
     }
 
@@ -80,6 +84,7 @@ public class UserServiceTests
     {
         Assert.ThrowsAsync<ObjectNotFoundException>(() =>
             _userService.UpdateAsync(new UserModel() { Id = Guid.NewGuid() }));
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
     
     [Fact]
@@ -92,6 +97,7 @@ public class UserServiceTests
         _userService.UpdateAsync(user);
         
         _fakeUserRepository.Verify(repo => repo.Update(user), Times.Once());
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Once);
     }
 
     [Fact]
@@ -99,6 +105,7 @@ public class UserServiceTests
     {
         Assert.ThrowsAsync<ObjectNotFoundException>(() =>
             _userService.UpdateAsync(new UserModel() { Id = Guid.NewGuid() }));
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
 
     [Fact]
@@ -111,7 +118,7 @@ public class UserServiceTests
 
         var exception =
             Assert.ThrowsAsync<Minibank.Core.Exceptions.ValidationException>(() => _userService.DeleteAsync(guid));
-
         Assert.Contains("have an active bank accounts", exception.Result.Message);
+        _fakeUnitOfWork.Verify(work => work.SaveChanges(), Times.Never);
     }
 }
