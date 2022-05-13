@@ -8,9 +8,9 @@ namespace Minibank.Core.Domain.BankAccounts.Repositories
     {
         Task<BankAccountModel> GetById(Guid id);
         Task<IEnumerable<BankAccountModel>> GetAll();
-        Task Create(BankAccountModel bankAccountModel);
+        Task<Guid> Create(BankAccountModel bankAccountModel);
         Task Update(BankAccountModel bankAccountModel);
-        Task Close(BankAccountModel bankAccountModel);
+        Task Close(Guid id);
         Task UpdateAmount(Guid id, decimal amount);
         Task<bool> Any(Guid id);
     }

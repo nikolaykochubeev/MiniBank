@@ -66,20 +66,10 @@ namespace Minibank.Core.Domain.BankAccounts.Services
 
             if (bankAccountModel.AmountOfMoney <= decimal.Zero)
             {
-                throw new ValidationException("Unable to create an account, the amount of money cannot be negative.");
+                throw new ValidationException("Unable to create an account, the amount of money cannot be negative");
             }
 
-            var bankAccountId = Guid.NewGuid();
-            await _bankAccountRepository.Create(new BankAccountModel
-            {
-                Id = bankAccountId,
-                UserId = bankAccountModel.UserId,
-                AmountOfMoney = bankAccountModel.AmountOfMoney,
-                Currency = bankAccountModel.Currency,
-                OpeningDate = DateTime.Now,
-                ClosingDate = DateTime.Now.AddYears(4),
-                IsActive = true
-            });
+            var bankAccountId = await _bankAccountRepository.Create(bankAccountModel);
             await _unitOfWork.SaveChanges();
 
             return bankAccountId;
@@ -90,6 +80,18 @@ namespace Minibank.Core.Domain.BankAccounts.Services
             var fromAccount = await _bankAccountRepository.GetById(transactionModel.FromAccountId);
             var toAccount = await _bankAccountRepository.GetById(transactionModel.ToAccountId);
 
+            if (fromAccount is null)
+            {
+                throw new ObjectNotFoundException(
+                    $"fromBankAccount with id = {transactionModel.FromAccountId} does not exist");
+            }
+
+            if (toAccount is null)
+            {
+                throw new ObjectNotFoundException(
+                    $"toBankAccount with id = {transactionModel.ToAccountId} does not exist");
+            }
+            
             if (fromAccount.Currency != transactionModel.Currency)
             {
                 throw new ValidationException(
@@ -170,7 +172,7 @@ namespace Minibank.Core.Domain.BankAccounts.Services
                 throw new ValidationException("It is impossible to close an account if there is money left on it");
             }
 
-            await _bankAccountRepository.Close(bankAccount);
+            await _bankAccountRepository.Close(bankAccount.Id);
             await _unitOfWork.SaveChanges();
         }
     }

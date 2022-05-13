@@ -64,11 +64,6 @@ namespace Minibank.Data.Users.Repositories
         {
             var entity = await _context.Users.FirstOrDefaultAsync(it => it.Id == userModel.Id);
 
-            if (entity is null)
-            {
-                throw new ValidationException($"User with id = {userModel.Id} doesn't exists");
-            }
-
             entity.Email = userModel.Email;
             entity.Login = userModel.Login;
         }

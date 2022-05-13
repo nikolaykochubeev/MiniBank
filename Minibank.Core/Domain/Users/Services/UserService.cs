@@ -53,6 +53,11 @@ namespace Minibank.Core.Domain.Users.Services
 
         public async Task UpdateAsync(UserModel userModel)
         {
+            if (userModel is null || GetByIdAsync(userModel.Id).Result is null)
+            {
+                throw new ValidationException($"User with id = {userModel!.Id} doesn't exists");
+            }
+            
             await _userRepository.Update(userModel);
             await _unitOfWork.SaveChanges();
         }
