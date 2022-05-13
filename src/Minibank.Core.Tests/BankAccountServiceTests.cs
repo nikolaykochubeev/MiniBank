@@ -14,7 +14,7 @@ using Minibank.Core.Exceptions;
 using Moq;
 using Xunit;
 
-namespace Tests;
+namespace Minibank.Core.Tests;
 
 public class BankAccountServiceTests
 {
